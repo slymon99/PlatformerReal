@@ -6,10 +6,18 @@ import java.awt.*;
  */
 public class Main {
     public static void main(String[] args) {
-        Window window = new Window();
+        JFrame window = new JFrame("Platform");
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setBounds(0, 0, 800, 600); //(x, y, w, h)
+
+        GamePanel gamePanel = new GamePanel();
+        gamePanel.setFocusable(true);
+        gamePanel.grabFocus();
+
+        window.add(gamePanel);
         window.setVisible(true);
-        window.setFocusable(true);
-        window.start();
+
+        gamePanel.start();
 
 
 
