@@ -19,6 +19,7 @@ public class GamePanel extends JPanel implements KeyListener{
 
     public GamePanel() {
         keys = new boolean[1000];
+        addKeyListener(this);
 //        // create a canvas to paint to
 //        this.canvas = new Canvas();
 //        this.canvas.setPreferredSize(size);
@@ -44,7 +45,7 @@ public class GamePanel extends JPanel implements KeyListener{
 
     public void initializeWorld() {
         world = new World();
-        world.addEntity(new Entity(0,0,200,10));
+        world.addEntity(new Entity(0,0,200,10, 0, 0));
     }
 
     public void start() {
@@ -63,6 +64,11 @@ public class GamePanel extends JPanel implements KeyListener{
                 // render as fast as possible
                 while (!isStopped()) {
                     gameLoop();
+                    try {
+                        Thread.sleep(2);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     // you could add a Thread.yield(); or
                     // Thread.sleep(long) here to give the
                     // CPU some breathing room
@@ -111,7 +117,7 @@ public class GamePanel extends JPanel implements KeyListener{
         // convert from nanoseconds to seconds
         double elapsedTime = diff / NANO_TO_BASE;
         // update the world with the elapsed time
-        this.world.update(elapsedTime);
+        this.world.update(elapsedTime, keys);
         repaint();
     }
 
@@ -136,14 +142,10 @@ public class GamePanel extends JPanel implements KeyListener{
         }
     }
 
-    public boolean isKeyPressed(int code) {
-        return keys[code];
-    }
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         keys[keyEvent.getKeyCode()] = true;
-        System.out.println("yee");
     }
 
     @Override
