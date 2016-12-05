@@ -45,7 +45,7 @@ public class GamePanel extends JPanel implements KeyListener{
 
     public void initializeWorld() {
         world = new World();
-        world.addEntity(new Entity(0,0,200,10, 0, 0));
+        world.addBlock(new Block(0,0,200,10));
     }
 
     public void start() {

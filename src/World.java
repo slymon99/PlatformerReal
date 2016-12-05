@@ -10,10 +10,10 @@ import java.util.ArrayList;
  */
 public class World {
 
-    private ArrayList<Entity> entities;
+    private ArrayList<Block> blocks;
 
-    private Entity squat;
-    private Entity lanky;
+    private Player squat;
+    private Player lanky;
 
     private boolean[] keys;
 
@@ -22,20 +22,19 @@ public class World {
 
     public World() {
 
-        entities = new ArrayList<Entity>();
+        blocks = new ArrayList<Block>();
 
-        squat = new Entity(10, 10, 55, 65, 70, 100);
-        lanky = new Entity(100, 10, 30, 125, 80, 100);
-        addEntity(squat);
-        addEntity(lanky);
+        squat = new Player(10, 10, 55, 65, 70, 100);
+        lanky = new Player(100, 10, 30, 125, 80, 100);
+        addBlock(squat);
+        addBlock(lanky);
 
         keys = new boolean[1000];
 
     }
 
     public void update(double elapsedTime, boolean[] keysPressed) {
-
-//        squat.move(elapsedTime);
+        squat.move(elapsedTime);
         keys = keysPressed;
 
         if (isKeyPressed(KeyEvent.VK_A)) {
@@ -67,24 +66,24 @@ public class World {
     }
 
     public void render(Graphics2D g2) {
-        for (int i = 0; i < entities.size(); i++) {
-            Entity e = entities.get(i);
+        for (int i = 0; i < blocks.size(); i++) {
+            Block e = blocks.get(i);
             e.draw(g2);
 
         }
     }
 
-    public void addEntity(Entity e) {
-        entities.add(e);
+    public void addBlock(Block e) {
+        blocks.add(e);
     }
 
 
-    public ArrayList<Entity> getEntities() {
-        return entities;
+    public ArrayList<Block> getBlocks() {
+        return blocks;
     }
 
-    public Entity getEntity(int i) {
-        return entities.get(i);
+    public Block getBlock(int i) {
+        return blocks.get(i);
     }
 
 
