@@ -65,7 +65,7 @@ public class GamePanel extends JPanel implements KeyListener{
                 while (!isStopped()) {
                     gameLoop();
                     try {
-                        Thread.sleep(2);
+                        Thread.sleep(1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -83,28 +83,6 @@ public class GamePanel extends JPanel implements KeyListener{
     }
 
     private void gameLoop() {
-        // get the graphics object to render to
-//        Graphics2D g2 = (Graphics2D) this.canvas.getBufferStrategy().getDrawGraphics();
-//
-//        // before we render everything i'm going to flip the y axis and move the
-//        // origin to the bottom left corner
-
-//
-//        // render anything about the Example (will render the World objects)
-//        this.render(g2);
-//
-//        // dispose of the graphics object
-//        g2.dispose();
-//
-//        // blit/flip the buffer
-//        BufferStrategy strategy = this.canvas.getBufferStrategy();
-//        if (!strategy.contentsLost()) {
-//            strategy.show();
-//        }
-//
-//        // Sync the display on some systems.
-//        // (on Linux, this fixes event queue problems)
-//        Toolkit.getDefaultToolkit().sync();
 
         // update the World
 
@@ -116,7 +94,7 @@ public class GamePanel extends JPanel implements KeyListener{
         this.last = time;
         // convert from nanoseconds to seconds
         double elapsedTime = diff / NANO_TO_BASE;
-        // update the world with the elapsed time
+        // update the world with the elapsed time and current keys pressed
         this.world.update(elapsedTime, keys);
         repaint();
     }
@@ -132,16 +110,10 @@ public class GamePanel extends JPanel implements KeyListener{
 
 //        g2.setColor(new Color(210,214,217));
 //        g2.fillRect(0,0,2000,2000);
-        render(g2);
-    }
 
-    public void render(Graphics2D g2){
-        for (int i = 0; i < world.getEntities().size(); i++) {
-            Entity e = world.getEntity(i);
-            e.draw(g2);
-        }
+        //let the world render all sprites
+        world.render(g2);
     }
-
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
