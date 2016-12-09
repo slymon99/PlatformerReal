@@ -9,6 +9,7 @@ public class Main {
         JFrame window = new JFrame("Platform");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setBounds(0, 0, 800, 600); //(x, y, w, h)
+        window.setResizable(false);
 
         GamePanel gamePanel = new GamePanel();
         gamePanel.setFocusable(true);
