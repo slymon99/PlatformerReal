@@ -4,11 +4,23 @@ import org.dyn4j.geometry.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
-import java.awt.image.BufferStrategy;
+
+import org.dyn4j.dynamics.Body;
+import org.dyn4j.dynamics.BodyFixture;
+import org.dyn4j.dynamics.World;
+import org.dyn4j.geometry.Capsule;
+import org.dyn4j.geometry.Circle;
+import org.dyn4j.geometry.Convex;
+import org.dyn4j.geometry.Geometry;
+import org.dyn4j.geometry.MassType;
+import org.dyn4j.geometry.Polygon;
+import org.dyn4j.geometry.Rectangle;
+import org.dyn4j.geometry.Slice;
+import org.dyn4j.geometry.Triangle;
+import org.dyn4j.geometry.Vector2;
 
 /**
  * Created by Simon on 12/3/2016.
@@ -25,41 +37,25 @@ public class GamePanel extends JPanel implements KeyListener{
 
     public static final double NANO_TO_BASE = 1.0e9;
 
+    public static final double SCALE = 45.0;
+
     public GamePanel() {
         keys = new boolean[1000];
         addKeyListener(this);
 
         world = new World();
-//        // create a canvas to paint to
-//        this.canvas = new Canvas();
-//        this.canvas.setPreferredSize(size);
-//        this.canvas.setMinimumSize(size);
-//        this.canvas.setMaximumSize(size);
-//
-//        // add the canvas to the JFrame
-//        this.add(this.canvas);
-//
-//        // make the JFrame not resizable
-//        // (this way I dont have to worry about resize events)
-//        this.setResizable(false);
-//
-//        // size everything
-//        this.pack();
 
         // make sure we are not stopped
         this.stopped = false;
 
-        // setup the worldDepreciated
+        // setup the world
         this.initializeWorld();
     }
 
     public void initializeWorld() {
-        worldDepreciated = new WorldDepreciated();
-        worldDepreciated.addBlock(new Block(0,0,200,10));
-
         world = new World();
-        org.dyn4j.geometry.Rectangle floorRect = new org.dyn4j.geometry.Rectangle(15.0, 1.0);
 
+        Rectangle floorRect = new Rectangle(15.0, 1.0);
         GameObject floor = new GameObject();
         floor.addFixture(new BodyFixture(floorRect));
         floor.setMass(MassType.INFINITE);
@@ -128,33 +124,61 @@ public class GamePanel extends JPanel implements KeyListener{
         // convert from nanoseconds to seconds
         double elapsedTime = diff / NANO_TO_BASE;
         // update the worldDepreciated with the elapsed time and current keys pressed
-        this.worldDepreciated.update(elapsedTime, keys);
+
+        passKeys();
+
         world.update(elapsedTime);
 
         repaint();
+    }
+
+    private void passKeys(){
+        if(isKeyPressed(KeyEvent.VK_A)){
+            world.getBody(1).applyForce(new Force(-.25,0));
+        }
+        if(isKeyPressed(KeyEvent.VK_D)){
+            world.getBody(1).applyForce(new Force(.25,0));
+        }
+        if(isKeyPressed(KeyEvent.VK_W)){
+            world.getBody(1).applyForce(new Force(0,.8));
+        }
+    }
+
+    private void render(Graphics2D g) {
+
+
+        AffineTransform yFlip = AffineTransform.getScaleInstance(1, -1);
+        AffineTransform move = AffineTransform.getTranslateInstance(400, -300);
+        g.transform(yFlip);
+        g.transform(move);
+        // lets move the view up some
+//        g.translate(0.0, -1.0 * SCALE);
+
+        // draw all the objects in the world
+        for (int i = 0; i < this.world.getBodyCount(); i++) {
+            // get the object
+            GameObject go = (GameObject) this.world.getBody(i);
+            // draw the object
+            go.render(g);
+        }
     }
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        AffineTransform yFlip = AffineTransform.getScaleInstance(1, -1);
-        AffineTransform move = AffineTransform.getTranslateInstance(0, -600);
-        g2.transform(yFlip);
-        g2.transform(move);
+//        AffineTransform yFlip = AffineTransform.getScaleInstance(1, -1);
+//        AffineTransform move = AffineTransform.getTranslateInstance(0, -600);
+//        g2.transform(yFlip);
+//        g2.transform(move);
 
 //        g2.setColor(new Color(210,214,217));
 //        g2.fillRect(0,0,2000,2000);
 
         //let the worldDepreciated render all sprites
-        worldDepreciated.render(g2);
+//        worldDepreciated.render(g2);
 
-        for (int i = 0; i < this.world.getBodyCount(); i++) {
-            // get the object
-            GameObject go = (GameObject) this.world.getBody(i);
-            // draw the object
-            go.render(g2);
-        }
+        render(g2);
     }
 
     @Override
@@ -169,6 +193,10 @@ public class GamePanel extends JPanel implements KeyListener{
 
     @Override
     public void keyTyped(KeyEvent keyEvent) {
+    }
+
+    public boolean isKeyPressed(int code) {
+        return keys[code];
     }
 
     public void stop() {
