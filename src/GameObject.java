@@ -21,6 +21,10 @@ public class GameObject extends Body {
                 (float)Math.random() * 0.5f + 0.5f);
     }
 
+    public GameObject(Color c) {
+        this.color = c;
+    }
+
     /**
      * Draws the body.
      * <p>

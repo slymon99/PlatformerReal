@@ -27,10 +27,8 @@ import org.dyn4j.geometry.Vector2;
  */
 public class GamePanel extends JPanel implements KeyListener{
 
-    private WorldDepreciated worldDepreciated;
-
     private boolean stopped;
-    private World world;
+    private GameWorld world;
 
     private long last;
     private boolean[] keys;
@@ -43,8 +41,6 @@ public class GamePanel extends JPanel implements KeyListener{
         keys = new boolean[1000];
         addKeyListener(this);
 
-        world = new World();
-
         // make sure we are not stopped
         this.stopped = false;
 
@@ -53,7 +49,7 @@ public class GamePanel extends JPanel implements KeyListener{
     }
 
     public void initializeWorld() {
-        world = new World();
+        world = new GameWorld();
 
         Rectangle floorRect = new Rectangle(15.0, 1.0);
         GameObject floor = new GameObject();
@@ -68,14 +64,14 @@ public class GamePanel extends JPanel implements KeyListener{
                 new Vector2(0.0, 0.5),
                 new Vector2(-0.5, -0.5),
                 new Vector2(0.5, -0.5));
-        GameObject triangle = new GameObject();
+        GameObject triangle = new GameObject(Color.green);
         triangle.addFixture(triShape);
         Mass m = new Mass(new Vector2(0,0),20.0,20.0);
         triangle.setMass(m);
         triangle.translate(-1.0, 2.0);
         // test having a velocity
         triangle.getLinearVelocity().set(5.0, 0.0);
-        this.world.addBody(triangle);
+        world.addSquat(triangle);
 
         // create a circle
         Circle cirShape = new Circle(0.5);
@@ -215,13 +211,13 @@ public class GamePanel extends JPanel implements KeyListener{
 
     private void passKeys(){
         if(isKeyPressed(KeyEvent.VK_A)){
-            world.getBody(1).applyForce(new Force(-10,0));
+            world.getSquat().applyForce(new Force(-10,0));
         }
         if(isKeyPressed(KeyEvent.VK_D)){
-            world.getBody(1).applyForce(new Force(10,0));
+            world.getSquat().applyForce(new Force(10,0));
         }
         if(isKeyPressed(KeyEvent.VK_W)){
-            world.getBody(1).applyForce(new Force(0,40));
+            world.getSquat().applyForce(new Force(0,40));
         }
     }
 
