@@ -64,7 +64,7 @@ public class GamePanel extends JPanel implements KeyListener{
                 new Vector2(0.0, 0.5),
                 new Vector2(-0.5, -0.5),
                 new Vector2(0.5, -0.5));
-        GameObject triangle = new GameObject(Color.green);
+        Player triangle = new Player(Color.green);
         triangle.addFixture(triShape);
         Mass m = new Mass(new Vector2(0,0),20.0,20.0);
         triangle.setMass(m);
