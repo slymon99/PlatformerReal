@@ -9,7 +9,8 @@ public class GameObject extends Body {
     /** The color of the object */
     protected Color color;
 
-
+    public static final double SCALE = 45.0;
+    
     /**
      * Default constructor.
      */
@@ -37,7 +38,7 @@ public class GameObject extends Body {
 
         // transform the coordinate system from world coordinates to local coordinates
         AffineTransform lt = new AffineTransform();
-        lt.translate(this.transform.getTranslationX() * 45, this.transform.getTranslationY() * 45);
+        lt.translate(this.transform.getTranslationX() * SCALE, this.transform.getTranslationY() * SCALE);
         lt.rotate(this.transform.getRotation());
 
         // apply the transform
@@ -47,7 +48,7 @@ public class GameObject extends Body {
         for (BodyFixture fixture : this.fixtures) {
             // get the shape on the fixture
             Convex convex = fixture.getShape();
-            Graphics2DRenderer.render(g, convex, 45, color);
+            Graphics2DRenderer.render(g, convex, SCALE, color);
         }
 
         // set the original transform
