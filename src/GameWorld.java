@@ -1,7 +1,6 @@
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
 
-import java.util.ArrayList;
 
 /**
  * Created by simon_clark on 12/15/16.
