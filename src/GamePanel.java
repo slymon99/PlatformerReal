@@ -133,7 +133,7 @@ public class GamePanel extends JPanel implements KeyListener{
         lTfixture.setDensity(5);
         lankyBottom.translate(5,0);
         lankyTop.translate(5,1.2);
-        GameObject lanky = new GameObject();
+        Player lanky = new Player(Color.gray);
         lanky.addFixture(lankyBottom);
         lanky.addFixture(lankyTop);
         lanky.setMass(MassType.FIXED_ANGULAR_VELOCITY);
