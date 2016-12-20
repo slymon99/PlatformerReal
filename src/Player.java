@@ -5,11 +5,13 @@ import java.awt.*;
  */
 public class Player extends GameObject {
 
-//    boolean
+    boolean onPlatform;
 
     public Player(Color c) {
         super(c);
+        onPlatform = false;
     }
 
+    public void detectPlatformCollision(){}
 
 }
