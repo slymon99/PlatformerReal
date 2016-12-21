@@ -25,4 +25,8 @@ public class GameWorld extends World{
     public Player getLanky() {
         return lanky;
     }
+
+    public void updateLandedness(){
+        lanky.detectLandedness(getBodies());
+    }
 }

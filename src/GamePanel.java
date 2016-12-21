@@ -105,23 +105,23 @@ public class GamePanel extends JPanel implements KeyListener{
 //        this.world.addBody(polygon);
 
         // try a compound object
-        Circle c1 = new Circle(0.5);
-        BodyFixture c1Fixture = new BodyFixture(c1);
-        c1Fixture.setDensity(0.5);
-        Circle c2 = new Circle(0.5);
-        BodyFixture c2Fixture = new BodyFixture(c2);
-        c2Fixture.setDensity(0.5);
-        Rectangle rm = new Rectangle(2.0, 1.0);
-        // translate the circles in local coordinates
-        c1.translate(-1.0, 0.0);
-        c2.translate(1.0, 0.0);
-        GameObject capsule = new GameObject();
-        capsule.addFixture(c1Fixture);
-        capsule.addFixture(c2Fixture);
-        capsule.addFixture(rm);
-        capsule.setMass(MassType.NORMAL);
-        capsule.translate(0.0, 4.0);
-        this.world.addBody(capsule);
+//        Circle c1 = new Circle(0.5);
+//        BodyFixture c1Fixture = new BodyFixture(c1);
+//        c1Fixture.setDensity(0.5);
+//        Circle c2 = new Circle(0.5);
+//        BodyFixture c2Fixture = new BodyFixture(c2);
+//        c2Fixture.setDensity(0.5);
+//        Rectangle rm = new Rectangle(2.0, 1.0);
+//        // translate the circles in local coordinates
+//        c1.translate(-1.0, 0.0);
+//        c2.translate(1.0, 0.0);
+//        GameObject capsule = new GameObject();
+//        capsule.addFixture(c1Fixture);
+//        capsule.addFixture(c2Fixture);
+//        capsule.addFixture(rm);
+//        capsule.setMass(MassType.NORMAL);
+//        capsule.translate(0.0, 4.0);
+//        this.world.addBody(capsule);
 
         //makes lanky
         Rectangle lankyBottom = new Rectangle(1,1.2);
@@ -221,6 +221,7 @@ public class GamePanel extends JPanel implements KeyListener{
         passKeys();
 
         world.update(elapsedTime);
+        world.updateLandedness();
 
         repaint();
     }
