@@ -27,6 +27,6 @@ public class GameWorld extends World{
     }
 
     public void updateLandedness(){
-        lanky.detectLandedness(getBodies());
+        squat.detectLandedness(getBodies());
     }
 }

@@ -1,3 +1,4 @@
+import org.dyn4j.collision.narrowphase.Raycast;
 import org.dyn4j.dynamics.*;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.geometry.*;
@@ -51,7 +52,7 @@ public class GamePanel extends JPanel implements KeyListener{
     public void initializeWorld() {
         world = new GameWorld();
 
-        Rectangle floorRect = new Rectangle(15.0, 1.0);
+        Rectangle floorRect = new Rectangle(15.0, 7.0);
         GameObject floor = new GameObject();
         floor.addFixture(new BodyFixture(floorRect));
         floor.setMass(MassType.INFINITE);
@@ -72,6 +73,10 @@ public class GamePanel extends JPanel implements KeyListener{
         // test having a velocity
         triangle.getLinearVelocity().set(5.0, 0.0);
         world.addSquat(triangle);
+
+
+
+//        world.raycast()
 
 //        // create a circle
 //        Circle cirShape = new Circle(0.5);
@@ -124,20 +129,14 @@ public class GamePanel extends JPanel implements KeyListener{
 //        this.world.addBody(capsule);
 
         //makes lanky
-        Rectangle lankyBottom = new Rectangle(1,1.2);
-        BodyFixture lBFixture = new BodyFixture(lankyBottom);
-        lBFixture.setDensity(300);
-        lBFixture.createMass();
-        Rectangle lankyTop = new Rectangle(1,1.2);
-        BodyFixture lTfixture = new BodyFixture(lankyTop);
-        lTfixture.setDensity(5);
-        lankyBottom.translate(5,0);
-        lankyTop.translate(5,1.2);
-        Player lanky = new Player(Color.gray);
-        lanky.addFixture(lankyBottom);
-        lanky.addFixture(lankyTop);
-        lanky.setMass(MassType.FIXED_ANGULAR_VELOCITY);
-        world.addLanky(lanky);
+//        Rectangle lankyRect = new Rectangle(1,3);
+//        Player lanky = new Player(Color.CYAN);
+//        lanky.addFixture(lankyRect, 0.5, 0.2, .1);
+//        Mass lankyMass = new Mass(new Vector2(0,0),20,20);
+//        lanky.setMass(lankyMass);
+//        lanky.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
+//
+//        world.addLanky(lanky);
 
 //        GameObject issTri = new GameObject();
 //        issTri.addFixture(Geometry.createIsoscelesTriangle(1.0, 3.0));
@@ -220,6 +219,10 @@ public class GamePanel extends JPanel implements KeyListener{
 
         passKeys();
 
+        Ray raymond = world.getSquat().getJumpDetectionRay();
+        RaycastResult geoffrey = new RaycastResult();
+        System.out.println( world.raycast(raymond, world.getBody(0), 1, false, geoffrey));
+
         world.update(elapsedTime);
         world.updateLandedness();
 
@@ -233,9 +236,26 @@ public class GamePanel extends JPanel implements KeyListener{
         if(isKeyPressed(KeyEvent.VK_D)){
             world.getSquat().applyForce(new Force(10,0));
         }
-        if(isKeyPressed(KeyEvent.VK_W)){
-            world.getSquat().applyForce(new Force(0,40));
+
+        Ray raymond = world.getSquat().getJumpDetectionRay();
+        RaycastResult geoffrey = new RaycastResult();
+        boolean canJump = world.raycast(raymond, world.getBody(0), 0.5, false, geoffrey);
+
+        if(isKeyPressed(KeyEvent.VK_W) && canJump){
+            world.getSquat().applyForce(new Force(0,400));
         }
+        
+        if(isKeyPressed(KeyEvent.VK_LEFT)){
+            world.getLanky().applyForce(new Force(-9,0));
+        }
+        if(isKeyPressed(KeyEvent.VK_RIGHT)){
+            world.getLanky().applyForce(new Force(9,0));
+        }
+        if(isKeyPressed(KeyEvent.VK_UP)){
+            world.getLanky().applyForce(new Force(0,100));
+        }
+
+//        world.raycast()
     }
 
     private void render(Graphics2D g) {
