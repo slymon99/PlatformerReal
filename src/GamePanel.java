@@ -227,11 +227,7 @@ public class GamePanel extends JPanel implements KeyListener{
         // update the worldDepreciated with the elapsed time and current keys pressed
 
         passKeys();
-
-        Ray raymond = world.getSquat().getJumpDetectionRay();
-        RaycastResult geoffrey = new RaycastResult();
-        System.out.println(!world.raycast(raymond, world.getBody(0), 0.5, false, geoffrey));
-
+        
         world.update(elapsedTime);
         world.updateLandedness();
 
