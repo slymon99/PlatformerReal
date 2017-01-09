@@ -82,15 +82,15 @@ public class GamePanel extends JPanel implements KeyListener{
 
         world.addSquat(squat);
 
-        //makes lanky
-        Rectangle lankyRect = new Rectangle(1,3);
-        Player lanky = new Player(Color.BLUE);
-        lanky.addFixture(lankyRect, 0.5, 0.2, .1);
-        Mass lankyMass = new Mass(new Vector2(0,0),20,20);
-        lanky.setMass(lankyMass);
-        lanky.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
-
-        world.addLanky(lanky);
+//        //makes lanky
+//        Rectangle lankyRect = new Rectangle(1,3);
+//        Player lanky = new Player(Color.BLUE);
+//        lanky.addFixture(lankyRect, 0.5, 0.2, .1);
+//        Mass lankyMass = new Mass(new Vector2(0,0),20,20);
+//        lanky.setMass(lankyMass);
+//        lanky.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
+//
+//        world.addLanky(lanky);
 
 
 
@@ -146,15 +146,6 @@ public class GamePanel extends JPanel implements KeyListener{
 //        capsule.translate(0.0, 4.0);
 //        this.world.addBody(capsule);
 
-        //makes lanky
-//        Rectangle lankyRect = new Rectangle(1,3);
-//        Player lanky = new Player(Color.CYAN);
-//        lanky.addFixture(lankyRect, 0.5, 0.2, .1);
-//        Mass lankyMass = new Mass(new Vector2(0,0),20,20);
-//        lanky.setMass(lankyMass);
-//        lanky.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
-//
-//        world.addLanky(lanky);
 
 //        GameObject issTri = new GameObject();
 //        issTri.addFixture(Geometry.createIsoscelesTriangle(1.0, 3.0));
@@ -257,7 +248,7 @@ public class GamePanel extends JPanel implements KeyListener{
 
         Ray raymond = world.getSquat().getJumpDetectionRay();
         RaycastResult geoffrey = new RaycastResult();
-        boolean canJump = !world.raycast(raymond, world.getBody(0), 0.5, false, geoffrey);
+        boolean canJump = world.raycast(raymond, world.getBody(0), 0.9, false, geoffrey);
 
 
         if(isKeyPressed(KeyEvent.VK_W )&& canJump){
