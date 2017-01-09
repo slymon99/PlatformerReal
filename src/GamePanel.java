@@ -61,18 +61,36 @@ public class GamePanel extends JPanel implements KeyListener{
         this.world.addBody(floor);
 
         // create a triangle object
-        Triangle triShape = new Triangle(
-                new Vector2(0.0, 0.5),
-                new Vector2(-0.5, -0.5),
-                new Vector2(0.5, -0.5));
-        Player triangle = new Player(Color.green);
-        triangle.addFixture(triShape);
-        Mass m = new Mass(new Vector2(0,0),20.0,20.0);
-        triangle.setMass(m);
-        triangle.translate(-1.0, 2.0);
-        // test having a velocity
-        triangle.getLinearVelocity().set(5.0, 0.0);
-        world.addSquat(triangle);
+//        Triangle triShape = new Triangle(
+//                new Vector2(0.0, 0.5),
+//                new Vector2(-0.5, -0.5),
+//                new Vector2(0.5, -0.5));
+//        Player triangle = new Player(Color.green);
+//        triangle.addFixture(triShape);
+//        Mass m = new Mass(new Vector2(0,0),20.0,20.0);
+//        triangle.setMass(m);
+//        triangle.translate(-1.0, 2.0);
+//        // test having a velocity
+//        triangle.getLinearVelocity().set(5.0, 0.0);
+//        world.addSquat(triangle);
+        Rectangle squatRect = new Rectangle(1.5,1.5);
+        Player squat = new Player(Color.GREEN);
+        squat.addFixture(squatRect, 0.5, 0.2, 0.1);
+        Mass squatMass = new Mass(new Vector2(0,0),5,25);
+        squat.setMass(squatMass);
+        squat.setMassType(MassType.NORMAL);
+
+        world.addSquat(squat);
+
+        //makes lanky
+        Rectangle lankyRect = new Rectangle(1,3);
+        Player lanky = new Player(Color.BLUE);
+        lanky.addFixture(lankyRect, 0.5, 0.2, .1);
+        Mass lankyMass = new Mass(new Vector2(0,0),20,20);
+        lanky.setMass(lankyMass);
+        lanky.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
+
+        world.addLanky(lanky);
 
 
 
@@ -221,7 +239,7 @@ public class GamePanel extends JPanel implements KeyListener{
 
         Ray raymond = world.getSquat().getJumpDetectionRay();
         RaycastResult geoffrey = new RaycastResult();
-        System.out.println( world.raycast(raymond, world.getBody(0), 1, false, geoffrey));
+        System.out.println(!world.raycast(raymond, world.getBody(0), 0.5, false, geoffrey));
 
         world.update(elapsedTime);
         world.updateLandedness();
@@ -239,10 +257,11 @@ public class GamePanel extends JPanel implements KeyListener{
 
         Ray raymond = world.getSquat().getJumpDetectionRay();
         RaycastResult geoffrey = new RaycastResult();
-        boolean canJump = world.raycast(raymond, world.getBody(0), 0.5, false, geoffrey);
+        boolean canJump = !world.raycast(raymond, world.getBody(0), 0.5, false, geoffrey);
 
-        if(isKeyPressed(KeyEvent.VK_W) && canJump){
-            world.getSquat().applyForce(new Force(0,400));
+
+        if(isKeyPressed(KeyEvent.VK_W )&& canJump){
+            world.getSquat().applyForce(new Force(0,40));
         }
         
         if(isKeyPressed(KeyEvent.VK_LEFT)){
