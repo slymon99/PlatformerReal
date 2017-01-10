@@ -34,6 +34,8 @@ public class GamePanel extends JPanel implements KeyListener{
     private long last;
     private boolean[] keys;
 
+    private double squatsAngle;
+
     public static final double NANO_TO_BASE = 1.0e9;
 
     public static final double SCALE = 45.0;
@@ -41,6 +43,8 @@ public class GamePanel extends JPanel implements KeyListener{
     public GamePanel() {
         keys = new boolean[1000];
         addKeyListener(this);
+
+        squatsAngle=0;
 
         // make sure we are not stopped
         this.stopped = false;
@@ -75,14 +79,14 @@ public class GamePanel extends JPanel implements KeyListener{
 //        world.addSquat(triangle);
         Rectangle squatRect = new Rectangle(1.5,1.5);
         Player squat = new Player(Color.GREEN);
-        squat.addFixture(squatRect, 0.5, 0.2, 0.1);
-        Mass squatMass = new Mass(new Vector2(0,0),5,25);
+        squat.addFixture(squatRect, 0.5, 0.2, 0.5);
+        Mass squatMass = new Mass(new Vector2(0,0),5,50);
         squat.setMass(squatMass);
-        squat.setMassType(MassType.NORMAL);
+        squat.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
 
         world.addSquat(squat);
 
-        //makes lanky
+//        //makes lanky
 //        Rectangle lankyRect = new Rectangle(1,3);
 //        Player lanky = new Player(Color.BLUE);
 //        lanky.addFixture(lankyRect, 0.5, 0.2, .1);
@@ -146,15 +150,6 @@ public class GamePanel extends JPanel implements KeyListener{
 //        capsule.translate(0.0, 4.0);
 //        this.world.addBody(capsule);
 
-        //makes lanky
-//        Rectangle lankyRect = new Rectangle(1,3);
-//        Player lanky = new Player(Color.CYAN);
-//        lanky.addFixture(lankyRect, 0.5, 0.2, .1);
-//        Mass lankyMass = new Mass(new Vector2(0,0),20,20);
-//        lanky.setMass(lankyMass);
-//        lanky.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
-//
-//        world.addLanky(lanky);
 
 //        GameObject issTri = new GameObject();
 //        issTri.addFixture(Geometry.createIsoscelesTriangle(1.0, 3.0));
@@ -237,12 +232,14 @@ public class GamePanel extends JPanel implements KeyListener{
 
         passKeys();
 
-        Ray raymond = world.getSquat().getJumpDetectionRay();
-        RaycastResult geoffrey = new RaycastResult();
-        System.out.println(!world.raycast(raymond, world.getBody(0), 0.5, false, geoffrey));
+//        squatsAngle += world.getSquat().getAngularVelocity() * elapsedTime;
 
+        
         world.update(elapsedTime);
         world.updateLandedness();
+
+//        System.out.println(world.getSquat().getChangeInOrientation());
+//        System.out.println(squatsAngle%(2*Math.PI));
 
         repaint();
     }
@@ -255,13 +252,14 @@ public class GamePanel extends JPanel implements KeyListener{
             world.getSquat().applyForce(new Force(10,0));
         }
 
+
         Ray raymond = world.getSquat().getJumpDetectionRay();
         RaycastResult geoffrey = new RaycastResult();
-        boolean canJump = world.raycast(raymond, world.getBody(0), 0.8, false, geoffrey);
+        boolean canJump = world.raycast(raymond, world.getBody(0), .8, false, geoffrey);
 
 
         if(isKeyPressed(KeyEvent.VK_W )&& canJump){
-            world.getSquat().applyForce(new Force(0,400));
+            world.getSquat().applyForce(new Force(0,200));
         }
         
         if(isKeyPressed(KeyEvent.VK_LEFT)){
