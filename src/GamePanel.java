@@ -8,6 +8,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
+import java.util.*;
+import java.util.List;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
@@ -26,7 +28,7 @@ import org.dyn4j.geometry.Vector2;
 /**
  * Created by Simon on 12/3/2016.
  */
-public class GamePanel extends JPanel implements KeyListener{
+public class GamePanel extends JPanel implements KeyListener {
 
     private boolean stopped;
     private GameWorld world;
@@ -36,7 +38,7 @@ public class GamePanel extends JPanel implements KeyListener{
 
     public static final double NANO_TO_BASE = 1.0e9;
 
-    public static final double SCALE = 45.0;
+    public static final double SCALE = 10.0;
 
     public GamePanel() {
         keys = new boolean[1000];
@@ -73,25 +75,25 @@ public class GamePanel extends JPanel implements KeyListener{
 //        // test having a velocity
 //        triangle.getLinearVelocity().set(5.0, 0.0);
 //        world.addSquat(triangle);
-        Rectangle squatRect = new Rectangle(1.5,1.5);
+        Rectangle squatRect = new Rectangle(1.5, 1.5);
         Player squat = new Player(Color.GREEN);
-        squat.addFixture(squatRect, 0.5, 0.2, 0.1);
-        Mass squatMass = new Mass(new Vector2(0,0),5,25);
+        squat.addFixture(squatRect, 0.5, 0.2, 0);
+        Mass squatMass = new Mass(new Vector2(0, 0), 5, 100);
         squat.setMass(squatMass);
-        squat.setMassType(MassType.NORMAL);
+        squat.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
+
 
         world.addSquat(squat);
 
-//        //makes lanky
-//        Rectangle lankyRect = new Rectangle(1,3);
-//        Player lanky = new Player(Color.BLUE);
-//        lanky.addFixture(lankyRect, 0.5, 0.2, .1);
-//        Mass lankyMass = new Mass(new Vector2(0,0),20,20);
-//        lanky.setMass(lankyMass);
-//        lanky.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
-//
-//        world.addLanky(lanky);
+        //makes lanky
+        Rectangle lankyRect = new Rectangle(1, 3);
+        Player lanky = new Player(Color.BLUE);
+        lanky.addFixture(lankyRect, 0.5, 0.2, .1);
+        Mass lankyMass = new Mass(new Vector2(0, 0), 20, 20);
+        lanky.setMass(lankyMass);
+        lanky.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
 
+        world.addLanky(lanky);
 
 
 //        world.raycast()
@@ -227,41 +229,51 @@ public class GamePanel extends JPanel implements KeyListener{
         // update the worldDepreciated with the elapsed time and current keys pressed
 
         passKeys();
-        
+
         world.update(elapsedTime);
         world.updateLandedness();
 
         repaint();
     }
 
-    private void passKeys(){
-        if(isKeyPressed(KeyEvent.VK_A)){
-            world.getSquat().applyForce(new Force(-10,0));
+    private void passKeys() {
+
+        Player lanky = world.getLanky();
+        Player squat = world.getSquat();
+
+        if (isKeyPressed(KeyEvent.VK_A)) {
+            squat.applyForce(new Force(-10, 0));
         }
-        if(isKeyPressed(KeyEvent.VK_D)){
-            world.getSquat().applyForce(new Force(10,0));
+        if (isKeyPressed(KeyEvent.VK_D)) {
+            squat.applyForce(new Force(10, 0));
         }
 
-        Ray raymond = world.getSquat().getJumpDetectionRay();
-        RaycastResult geoffrey = new RaycastResult();
-        boolean canJump = world.raycast(raymond, world.getBody(0), 0.9, false, geoffrey);
+        ArrayList<RaycastResult> result = new ArrayList<RaycastResult>(); //no idea what this does
+        boolean canJump = world.raycast(squat.getJumpDetectionRay(), 0.755, false, false, true, result) && squat.canJump();
 
-
-        if(isKeyPressed(KeyEvent.VK_W )&& canJump){
-            world.getSquat().applyForce(new Force(0,40));
-        }
-        
-        if(isKeyPressed(KeyEvent.VK_LEFT)){
-            world.getLanky().applyForce(new Force(-9,0));
-        }
-        if(isKeyPressed(KeyEvent.VK_RIGHT)){
-            world.getLanky().applyForce(new Force(9,0));
-        }
-        if(isKeyPressed(KeyEvent.VK_UP)){
-            world.getLanky().applyForce(new Force(0,100));
+        if (isKeyPressed(KeyEvent.VK_W) && canJump) {
+            squat.applyImpulse(new Vector2(0, 50));
+            squat.jump();
         }
 
-//        world.raycast()
+        if (isKeyPressed(KeyEvent.VK_LEFT)) {
+            lanky.applyForce(new Force(-9, 0));
+        }
+        if (isKeyPressed(KeyEvent.VK_RIGHT)) {
+            lanky.applyForce(new Force(9, 0));
+        }
+
+        ArrayList<RaycastResult> result2 = new ArrayList<RaycastResult>(); //no idea what this does
+        boolean canJump2 = world.raycast(world.getLanky().getJumpDetectionRay(), 1.51, false, false, true, result2) && lanky.canJump();
+
+        if (isKeyPressed(KeyEvent.VK_UP) && canJump2) {
+            lanky.applyImpulse(new Vector2(0, 100));
+            lanky.jump();
+        }
+
+        squat.tickUp();
+        lanky.tickUp();
+
     }
 
     private void render(Graphics2D g) {
@@ -283,7 +295,7 @@ public class GamePanel extends JPanel implements KeyListener{
         }
     }
 
-    public void paintComponent(Graphics g){
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
