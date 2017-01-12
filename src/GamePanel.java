@@ -79,12 +79,15 @@ public class GamePanel extends JPanel implements KeyListener{
 //        world.addSquat(triangle);
         Rectangle squatRect = new Rectangle(1.5,1.5);
         Player squat = new Player(Color.GREEN);
-        squat.addFixture(squatRect, 0.5, 0.2, 0.5);
-        Mass squatMass = new Mass(new Vector2(0,0),5,50);
+        squat.addFixture(squatRect, 0.5, 0.2, 0);
+        Mass squatMass = new Mass(new Vector2(0,0),5,100);
         squat.setMass(squatMass);
         squat.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
 
         world.addSquat(squat);
+
+        Platform tester = new Platform(4,6,5,.5);
+        world.addBody(tester);
 
 //        //makes lanky
 //        Rectangle lankyRect = new Rectangle(1,3);
