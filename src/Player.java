@@ -30,6 +30,6 @@ public class Player extends GameObject {
     }
 
     public boolean canJump() {
-        return (ticksSinceJumped > 10);
+        return (ticksSinceJumped > 30);
     }
 }

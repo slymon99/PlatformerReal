@@ -9,7 +9,7 @@ public class GameObject extends Body {
     /** The color of the object */
     protected Color color;
 
-    public static final double SCALE = 10.0;
+    public static final double SCALE = 25.0;
     
     /**
      * Default constructor.

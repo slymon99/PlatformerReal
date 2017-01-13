@@ -231,7 +231,6 @@ public class GamePanel extends JPanel implements KeyListener {
         passKeys();
 
         world.update(elapsedTime);
-        world.updateLandedness();
 
         repaint();
     }
@@ -249,7 +248,7 @@ public class GamePanel extends JPanel implements KeyListener {
         }
 
         ArrayList<RaycastResult> result = new ArrayList<RaycastResult>(); //no idea what this does
-        boolean canJump = world.raycast(squat.getJumpDetectionRay(), 0.755, false, false, true, result) && squat.canJump();
+        boolean canJump = world.raycast(squat.getJumpDetectionRay(), 0.78, false, false, true, result) && squat.canJump();
 
         if (isKeyPressed(KeyEvent.VK_W) && canJump) {
             squat.applyImpulse(new Vector2(0, 50));
@@ -264,7 +263,7 @@ public class GamePanel extends JPanel implements KeyListener {
         }
 
         ArrayList<RaycastResult> result2 = new ArrayList<RaycastResult>(); //no idea what this does
-        boolean canJump2 = world.raycast(world.getLanky().getJumpDetectionRay(), 1.51, false, false, true, result2) && lanky.canJump();
+        boolean canJump2 = world.raycast(world.getLanky().getJumpDetectionRay(), 1.6, false, false, true, result2) && lanky.canJump();
 
         if (isKeyPressed(KeyEvent.VK_UP) && canJump2) {
             lanky.applyImpulse(new Vector2(0, 100));
