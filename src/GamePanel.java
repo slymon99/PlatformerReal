@@ -33,6 +33,8 @@ public class GamePanel extends JPanel implements KeyListener {
     private boolean stopped;
     private GameWorld world;
 
+    private ArrayList<MovingPlatform> movingPlatforms;
+
     private long last;
     private boolean[] keys;
 
@@ -44,11 +46,15 @@ public class GamePanel extends JPanel implements KeyListener {
         keys = new boolean[1000];
         addKeyListener(this);
 
+        movingPlatforms = new ArrayList<MovingPlatform>();
+
         // make sure we are not stopped
         this.stopped = false;
 
         // setup the world
         this.initializeWorld();
+
+
     }
 
     public void initializeWorld() {
@@ -78,7 +84,7 @@ public class GamePanel extends JPanel implements KeyListener {
         Rectangle squatRect = new Rectangle(1.5, 1.5);
         Player squat = new Player(Color.GREEN);
         squat.addFixture(squatRect, 0.5, 0.2, 0);
-        Mass squatMass = new Mass(new Vector2(0, 0), 5, 100);
+        Mass squatMass = new Mass(new Vector2(0, 0), 10, 1);
         squat.setMass(squatMass);
         squat.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
 
@@ -88,12 +94,16 @@ public class GamePanel extends JPanel implements KeyListener {
         //makes lanky
         Rectangle lankyRect = new Rectangle(1, 3);
         Player lanky = new Player(Color.BLUE);
-        lanky.addFixture(lankyRect, 0.5, 0.2, .1);
-        Mass lankyMass = new Mass(new Vector2(0, 0), 20, 20);
+        lanky.addFixture(lankyRect, 0.5, 0.2, 0);
+        Mass lankyMass = new Mass(new Vector2(0, 0), 10, 1);
         lanky.setMass(lankyMass);
         lanky.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
 
         world.addLanky(lanky);
+
+        MovingPlatform testMovePlatform = new MovingPlatform(new Vector2(-5, 5), new Vector2(-5, 5), new Vector2(0, 0), 5, 1, 1);
+        world.addBody(testMovePlatform);
+        movingPlatforms.add(testMovePlatform);
 
 
 //        world.raycast()
@@ -231,6 +241,7 @@ public class GamePanel extends JPanel implements KeyListener {
         passKeys();
 
         world.update(elapsedTime);
+        updateAllPlatforms();
 
         repaint();
     }
@@ -310,6 +321,12 @@ public class GamePanel extends JPanel implements KeyListener {
 //        worldDepreciated.render(g2);
 
         render(g2);
+    }
+
+    private void updateAllPlatforms() {
+        for (MovingPlatform p : movingPlatforms) {
+            p.update();
+        }
     }
 
     @Override

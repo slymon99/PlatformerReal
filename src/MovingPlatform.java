@@ -1,28 +1,35 @@
-import org.dyn4j.geometry.MassType;
+import org.dyn4j.geometry.Vector2;
 
 /**
  * Created by john_gordon on 1/12/17.
  */
 public class MovingPlatform extends Platform {
-    private double x1, x2, y1, y2,  xVel, yVel, width, height;
+    private double speed;
+    private Vector2 start, end;
 
-    public MovingPlatform(double ex1, double why1, double w1dth, double he1ght, double ex2, double why2, double xSpeed, double ySpeed ){
-        super(ex1, why1, w1dth, he1ght);
+    public MovingPlatform(Vector2 spawn, Vector2 start, Vector2 end, double speed, double width, double height) {
+        super(spawn, width, height);
 
-        x1= ex1;
-        x2=ex2;
-        width = w1dth;
-        height = he1ght;
-        y1=why1;
-        y2=why2;
-        xVel=xSpeed;
-        yVel=ySpeed;
+        this.start = start;
+        this.end = end;
+        this.speed = speed;
 
-        super.translate(x1,y1);
-
-        super.setLinearVelocity(xSpeed,ySpeed);
+        super.setLinearVelocity(this.end.difference(this.start).setMagnitude(this.speed));
     }
+    
+    public void update(){
 
 
+        double distanceBetween = start.difference(end).getMagnitude();
+        double distanceFromStart = start.difference(getWorldCenter()).getMagnitude();
+        double distanceFromEnd = end.difference(getWorldCenter()).getMagnitude();
 
+        if(distanceBetween < distanceFromEnd){
+            setLinearVelocity(end.difference(start).setMagnitude(speed));
+        }
+        else if(distanceBetween < distanceFromStart){
+            setLinearVelocity(start.difference(end).setMagnitude(speed));
+        }
+
+    }
 }
