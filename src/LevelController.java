@@ -13,10 +13,10 @@ public class LevelController {
 
         BufferedReader fileReader;
         try {
-            fileReader = new BufferedReader(new FileReader("1.txt"));
+            fileReader = new BufferedReader(new FileReader("level/1.txt"));
 
             String in = fileReader.readLine();
-            int c = 0;
+
             while (in != null) {
                 System.out.println(in);
                 in = fileReader.readLine();
