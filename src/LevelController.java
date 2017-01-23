@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 /**
  * Created by simon_clark on 1/20/17.
