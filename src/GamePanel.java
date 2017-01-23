@@ -290,7 +290,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
 
         AffineTransform yFlip = AffineTransform.getScaleInstance(1, -1);
-        AffineTransform move = AffineTransform.getTranslateInstance(400, -300);
+        AffineTransform move = AffineTransform.getTranslateInstance(720, -425);
         g.transform(yFlip);
         g.transform(move);
         // lets move the view up some
