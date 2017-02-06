@@ -60,6 +60,10 @@ public class GamePanel extends JPanel implements KeyListener {
     public void initializeWorld() {
         world = new GameWorld();
 
+        LevelController lc = new LevelController();
+        lc.readLevel(1);
+        lc.readLevel(2);
+
         Rectangle floorRect = new Rectangle(15.0, 7.0);
         GameObject floor = new GameObject();
         floor.addFixture(new BodyFixture(floorRect));
