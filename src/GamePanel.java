@@ -68,6 +68,8 @@ public class GamePanel extends JPanel implements KeyListener {
         floor.translate(0.0, -4.0);
         this.world.addBody(floor);
 
+
+
         // create a triangle object
 //        Triangle triShape = new Triangle(
 //                new Vector2(0.0, 0.5),
