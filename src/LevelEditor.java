@@ -57,6 +57,7 @@ public class LevelEditor extends JPanel  implements MouseListener, KeyListener, 
         for(Rectangle r: myRects) {
             g2.fill(r);
         }
+        g2.draw(outline);
     }
 
     @Override
@@ -99,7 +100,6 @@ public class LevelEditor extends JPanel  implements MouseListener, KeyListener, 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         keys[keyEvent.getKeyCode()] = true;
-        repaint();
     }
 
     @Override
