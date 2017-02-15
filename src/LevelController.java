@@ -18,7 +18,7 @@ public class LevelController {
             String in = fileReader.readLine();
 
             while (in != null) {
-                System.out.println(in);
+                parseLine(in);
                 in = fileReader.readLine();
             }
 
@@ -29,7 +29,17 @@ public class LevelController {
         return null;
     }
 
-    private void parseLine(String in, int levelIndex){
+    private Level parseLine(String in) {
+        Level l = new Level();
 
+        String[] line = in.split(" ");
+        if (line[0] == "m") {
+
+        }
+
+        if (line[0] == "p") {
+
+        }
+        return null;
     }
 }
