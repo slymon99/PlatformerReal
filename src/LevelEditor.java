@@ -10,14 +10,16 @@ import java.util.ArrayList;
 /**
  * Created by simon_clark on 1/23/17.
  */
-public class LevelEditor extends JPanel  implements MouseListener, KeyListener, MouseMotionListener{
+public class LevelEditor extends JPanel implements MouseListener, KeyListener, MouseMotionListener {
     private int rectX, rectY, width, height;
     private ArrayList<Rectangle> myRects;
     private boolean[] keys;
     private Rectangle outline;
+    private Timer t;
+    private int mouseX, mouseY;
 
 
-    public LevelEditor(){
+    public LevelEditor() {
         addMouseListener(this);
         addMouseMotionListener(this);
         addKeyListener(this);
@@ -25,7 +27,26 @@ public class LevelEditor extends JPanel  implements MouseListener, KeyListener, 
         outline = new Rectangle();
         myRects = new ArrayList<Rectangle>();
 
-        myRects.add(new Rectangle(200,300, 40, 40));
+        myRects.add(new Rectangle(200, 300, 40, 40));
+
+        t = new Timer(1000 / 60, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                System.out.println(MouseInfo.getPointerInfo().getLocation().getX() + " pls");
+                if (isKeyPressed(KeyEvent.VK_SPACE)) {
+                    System.out.println("space");
+                    for (int i = 0; i<myRects.size();i++) {
+                        if (rectContains(myRects.get(i), (int) MouseInfo.getPointerInfo().getLocation().getX() - 720, -(int) MouseInfo.getPointerInfo().getLocation().getY() + 425)) {
+                            myRects.remove(i);
+                            i--;
+                            repaint();
+                        }
+                    }
+                }
+            }
+        });
+
+        t.start();
     }
 
     public static void main(String[] args) {
@@ -42,10 +63,10 @@ public class LevelEditor extends JPanel  implements MouseListener, KeyListener, 
 
     }
 
-    public void paintComponent(Graphics g){
+    public void paintComponent(Graphics g) {
 
         super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D)g;
+        Graphics2D g2 = (Graphics2D) g;
 
         AffineTransform yFlip = AffineTransform.getScaleInstance(1, -1);
         AffineTransform move = AffineTransform.getTranslateInstance(720, -425);
@@ -53,8 +74,7 @@ public class LevelEditor extends JPanel  implements MouseListener, KeyListener, 
         g2.transform(move);
 
 
-
-        for(Rectangle r: myRects) {
+        for (Rectangle r : myRects) {
             g2.fill(r);
         }
         g2.draw(outline);
@@ -68,15 +88,15 @@ public class LevelEditor extends JPanel  implements MouseListener, KeyListener, 
 
     @Override
     public void mousePressed(MouseEvent e) {
-        rectX=e.getX()-720;
-        rectY=-e.getY()+425;
+        rectX = e.getX() - 720;
+        rectY = -e.getY() + 425;
 
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        width=e.getX()-rectX-720;
-        height= -e.getY()+425 - rectY;
+        width = e.getX() - rectX - 720;
+        height = -e.getY() + 425 - rectY;
         myRects.add(new Rectangle(rectX, rectY, width, height));
         repaint();
 
@@ -113,19 +133,29 @@ public class LevelEditor extends JPanel  implements MouseListener, KeyListener, 
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        width=e.getX()-rectX-720;
-        height= -e.getY()+425 - rectY;
+        width = e.getX() - rectX - 720;
+        height = -e.getY() + 425 - rectY;
         outline.setBounds(rectX, rectY, width, height);
         repaint();
-        System.out.println(round(2) + " " + round(8) + " " + round(18));
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-
+        mouseX = e.getX();
+        mouseY = e.getY();
+//        System.out.println(mouseX + " " + mouseY);
     }
 
-    private int round(int n){
-        return Math.round(n/10) * 10;
+    private int round(int n) {
+        return Math.round(n / 10) * 10;
+    }
+
+    private boolean rectContains(Rectangle rect, int x, int y) {
+        if (rect.getX() < x && rect.getWidth() + rect.getX() > x) {
+            if (rect.getY() < y && rect.getY() + rect.getHeight() > y) {
+                return true;
+            }
+        }
+        return false;
     }
 }
