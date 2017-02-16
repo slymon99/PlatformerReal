@@ -147,7 +147,7 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
     }
 
     private int round(int n) {
-        return Math.round(n / 10) * 10;
+        return (n / 10) * 10;
     }
 
     private boolean rectContains(Rectangle rect, int x, int y) {
