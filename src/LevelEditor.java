@@ -27,18 +27,15 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
         outline = new Rectangle();
         myRects = new ArrayList<Rectangle>();
 
-        myRects.add(new Rectangle(200, 300, 40, 40));
-
         t = new Timer(1000 / 60, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                System.out.println(MouseInfo.getPointerInfo().getLocation().getX() + " pls");
                 if (isKeyPressed(KeyEvent.VK_SPACE)) {
-                    System.out.println("space");
                     for (int i = 0; i<myRects.size();i++) {
-                        if (rectContains(myRects.get(i), (int) MouseInfo.getPointerInfo().getLocation().getX() - 720, -(int) MouseInfo.getPointerInfo().getLocation().getY() + 425)) {
+                        if (rectContains(myRects.get(i), (int) MouseInfo.getPointerInfo().getLocation().getX() - 720, -(int) MouseInfo.getPointerInfo().getLocation().getY() + 470)) {
                             myRects.remove(i);
                             i--;
+                            outline.setSize(0,0);
                             repaint();
                         }
                     }
