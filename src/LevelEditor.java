@@ -36,7 +36,6 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
                         if (rectContains(myRects.get(i), (int) MouseInfo.getPointerInfo().getLocation().getX() - 720, -(int) MouseInfo.getPointerInfo().getLocation().getY() + 470)) {
                             myRects.remove(i);
                             i--;
-                            outline.setSize(0,0);
                             repaint();
                         }
                     }
@@ -69,6 +68,7 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
         window.add(panel);
         window.setVisible(true);
 
+
     }
 
     public void paintComponent(Graphics g) {
@@ -96,16 +96,17 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
 
     @Override
     public void mousePressed(MouseEvent e) {
-        rectX = e.getX() - 720;
-        rectY = -e.getY() + 425;
+        rectX = round(e.getX() - 720);
+        rectY = round(-e.getY() + 425);
 
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        width = e.getX() - rectX - 720;
-        height = -e.getY() + 425 - rectY;
+        width = round(e.getX() - rectX - 720);
+        height = round(-e.getY() + 425 - rectY);
         myRects.add(new Rectangle(rectX, rectY, width, height));
+        outline.setSize(-1,-1);
         repaint();
 
 
@@ -141,8 +142,8 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        width = e.getX() - rectX - 720;
-        height = -e.getY() + 425 - rectY;
+        width = round(e.getX() - rectX - 720);
+        height = round(-e.getY() + 425 - rectY);
         outline.setBounds(rectX, rectY, width, height);
         repaint();
     }
@@ -154,8 +155,8 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
 //        System.out.println(mouseX + " " + mouseY);
     }
 
-    private int round(int n) {
-        return (n / 10) * 10;
+    private static int round(int n) {
+        return (n + 9)/10 * 10;
     }
 
     private boolean rectContains(Rectangle rect, int x, int y) {
