@@ -9,20 +9,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
 import java.util.*;
-import java.util.List;
 
-import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
-import org.dyn4j.dynamics.World;
-import org.dyn4j.geometry.Capsule;
-import org.dyn4j.geometry.Circle;
-import org.dyn4j.geometry.Convex;
-import org.dyn4j.geometry.Geometry;
+
 import org.dyn4j.geometry.MassType;
-import org.dyn4j.geometry.Polygon;
 import org.dyn4j.geometry.Rectangle;
-import org.dyn4j.geometry.Slice;
-import org.dyn4j.geometry.Triangle;
 import org.dyn4j.geometry.Vector2;
 
 /**

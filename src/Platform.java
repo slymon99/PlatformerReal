@@ -22,11 +22,4 @@ public class Platform extends GameObject{
         super.translate(start);
 
     }
-
-
-
-
-
-
-
 }
