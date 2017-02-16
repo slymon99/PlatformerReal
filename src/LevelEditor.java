@@ -17,6 +17,7 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
     private Rectangle outline;
     private Timer t;
     private int mouseX, mouseY;
+    private int recentlyDeleted;
 
 
     public LevelEditor() {
@@ -39,6 +40,16 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
                             repaint();
                         }
                     }
+                }
+                if(isKeyPressed(KeyEvent.VK_BACK_SPACE)){
+                    if(myRects.size()>0 && recentlyDeleted==0) {
+                        myRects.remove(myRects.size() - 1);
+                        recentlyDeleted=50;
+                        repaint();
+                    }
+                }
+                if(recentlyDeleted>0){
+                    recentlyDeleted--;
                 }
             }
         });
