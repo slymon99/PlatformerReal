@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -7,6 +8,12 @@ import java.util.ArrayList;
 public class LevelController {
 
     private ArrayList<Level> levels;
+
+    private int nextLevel;
+
+    public LevelController(){
+        nextLevel = 0;
+    }
 
     public ArrayList<GameObject> readLevel(int level) {
 
@@ -26,45 +33,30 @@ public class LevelController {
         }
 
         return null;
+
     }
 
-    public void writeLevel() {
+    public void writeLevel(ArrayList<ColoredRectangle> rects) {
 
 
         BufferedWriter bw = null;
         FileWriter fw = null;
 
-        try {
-
-            String content = "This is the content to write into file\n";
-
-            fw = new FileWriter("level/testFile.txt");
-            bw = new BufferedWriter(fw);
-            bw.write(content);
-
-            System.out.println("Done");
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-
-        } finally {
 
             try {
+                PrintWriter writer = new PrintWriter("level/" + Integer.toString(nextLevel)+ ".txt", "UTF-8");
 
-                if (bw != null)
-                    bw.close();
+                for (ColoredRectangle rect : rects) {
+                    writer.println(rect.encodeString());
+                }
 
-                if (fw != null)
-                    fw.close();
-
-            } catch (IOException ex) {
-
-                ex.printStackTrace();
-
+                writer.close();
+            } catch (IOException e) {
+                // do something
             }
 
-        }
+            nextLevel++;
+
     }
 
     private Level parseLine(String in) {
