@@ -1,5 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
@@ -27,6 +26,45 @@ public class LevelController {
         }
 
         return null;
+    }
+
+    public void writeLevel() {
+
+
+        BufferedWriter bw = null;
+        FileWriter fw = null;
+
+        try {
+
+            String content = "This is the content to write into file\n";
+
+            fw = new FileWriter("level/testFile.txt");
+            bw = new BufferedWriter(fw);
+            bw.write(content);
+
+            System.out.println("Done");
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+
+        } finally {
+
+            try {
+
+                if (bw != null)
+                    bw.close();
+
+                if (fw != null)
+                    fw.close();
+
+            } catch (IOException ex) {
+
+                ex.printStackTrace();
+
+            }
+
+        }
     }
 
     private Level parseLine(String in) {
