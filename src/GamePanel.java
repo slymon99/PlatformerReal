@@ -53,6 +53,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
         LevelController lc = new LevelController();
         lc.readLevel(1);
+        lc.writeLevel();
 
         Rectangle floorRect = new Rectangle(15.0, 7.0);
         GameObject floor = new GameObject();
@@ -100,6 +101,7 @@ public class GamePanel extends JPanel implements KeyListener {
         MovingPlatform testMovePlatform = new MovingPlatform(new Vector2(-5, 5), new Vector2(-5, 5), new Vector2(0, 0), 5, 1, 1);
         world.addBody(testMovePlatform);
         movingPlatforms.add(testMovePlatform);
+
 
 
 //        world.raycast()
