@@ -18,6 +18,8 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
     private Timer t;
     private int mouseX, mouseY;
     private int recentlyDeleted;
+    private Color color;
+    private ArrayList<Color> colors;
 
 
     public LevelEditor() {
@@ -27,6 +29,11 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
         keys = new boolean[1000];
         outline = new Rectangle();
         myRects = new ArrayList<Rectangle>();
+        color = Color.black;
+        colors = new ArrayList<Color>();
+
+        for(int i = 10; i<1441; i=i+10){
+        }
 
         t = new Timer(1000 / 60, new ActionListener() {
             @Override
@@ -35,6 +42,7 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
                     for (int i = 0; i<myRects.size();i++) {
                         if (rectContains(myRects.get(i), (int) MouseInfo.getPointerInfo().getLocation().getX() - 720, -(int) MouseInfo.getPointerInfo().getLocation().getY() + 470)) {
                             myRects.remove(i);
+                            colors.remove(i);
                             i--;
                             repaint();
                         }
@@ -43,12 +51,22 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
                 if(isKeyPressed(KeyEvent.VK_BACK_SPACE)){
                     if(myRects.size()>0 && recentlyDeleted==0) {
                         myRects.remove(myRects.size() - 1);
+                        colors.remove(colors.size()-1);
                         recentlyDeleted=50;
                         repaint();
                     }
                 }
                 if(recentlyDeleted>0){
                     recentlyDeleted--;
+                }
+                if(isKeyPressed(KeyEvent.VK_1)){
+                    color = Color.black;
+                }
+                if(isKeyPressed(KeyEvent.VK_2)){
+                    color = Color.red;
+                }
+                if(isKeyPressed(KeyEvent.VK_3)){
+                    color = Color.blue;
                 }
             }
         });
@@ -82,9 +100,11 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
         g2.transform(move);
 
 
-        for (Rectangle r : myRects) {
-            g2.fill(r);
+        for (int i = 0; i < myRects.size();i++) {
+            g2.setColor(colors.get(i));
+            g2.fill(myRects.get(i));
         }
+        g2.setColor(color);
         g2.draw(outline);
     }
 
@@ -106,6 +126,7 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
         width = round(e.getX() - rectX - 720);
         height = round(-e.getY() + 425 - rectY);
         myRects.add(new Rectangle(rectX, rectY, width, height));
+        colors.add(color);
         outline.setSize(-1,-1);
         repaint();
 
