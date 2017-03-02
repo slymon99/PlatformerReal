@@ -10,7 +10,7 @@ public class ColoredRectangle extends Rectangle{
         super(x,y,w,h);
         color = c;
     }
-    
+
 
     public Color getColor() {
         return color;
@@ -18,5 +18,20 @@ public class ColoredRectangle extends Rectangle{
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public String encodeString() {
+        String result = ("" + getX() + " " + getY() + " " + getWidth() + " " + getHeight() + " ");
+        if(getColor().equals(Color.black)){
+            result+="platform";
+        }
+        else if(getColor().equals(Color.red)){
+            result+="spikes";
+        }
+        else if(getColor().equals(Color.black)){
+            result+="movingplatform";
+        }
+
+        return result;
     }
 }

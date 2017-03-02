@@ -53,7 +53,9 @@ public class GamePanel extends JPanel implements KeyListener {
 
         LevelController lc = new LevelController();
         lc.readLevel(1);
-        lc.writeLevel();
+        ArrayList<ColoredRectangle> rects = new ArrayList<ColoredRectangle>();
+        rects.add(new ColoredRectangle(1,2,3,4,Color.red));
+        lc.writeLevel(rects);
 
         Rectangle floorRect = new Rectangle(15.0, 7.0);
         GameObject floor = new GameObject();
