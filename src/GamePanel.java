@@ -33,7 +33,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
     public static final double NANO_TO_BASE = 1.0e9;
 
-    public static final double SCALE = 10.0;
+    public static final double SCALE = 40.0;
 
     public GamePanel() {
         keys = new boolean[1000];
@@ -95,7 +95,7 @@ public class GamePanel extends JPanel implements KeyListener {
         world.addBody(p);
 
         //loads first level
-        ArrayList<GameObject> levelOne = lc.readLevel(1);
+        ArrayList<GameObject> levelOne = lc.readLevel(0);
         for(GameObject o: levelOne){
             world.addBody(o);
         }
