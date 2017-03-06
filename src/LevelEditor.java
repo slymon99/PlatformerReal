@@ -12,14 +12,17 @@ import java.util.ArrayList;
  */
 public class LevelEditor extends JPanel implements MouseListener, KeyListener, MouseMotionListener {
     private int rectX, rectY, width, height;
-    private ArrayList<Rectangle> myRects;
+    private ArrayList<ColoredRectangle> myRects;
     private boolean[] keys;
     private Rectangle outline;
     private Timer t;
     private int mouseX, mouseY;
     private int recentlyDeleted;
     private Color color;
-    private ArrayList<Color> colors;
+    private Point lankySpawn;
+    private Point squatSpawn;
+    private Point goal;
+    private int drawMode;
 
 
     public LevelEditor() {
@@ -28,9 +31,12 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
         addKeyListener(this);
         keys = new boolean[1000];
         outline = new Rectangle();
-        myRects = new ArrayList<Rectangle>();
+        myRects = new ArrayList<ColoredRectangle>();
         color = Color.black;
-        colors = new ArrayList<Color>();
+        int drawmode = 0;
+        lankySpawn = new Point(1400,30);
+        squatSpawn = new Point(1400,40);
+        goal = new Point(1400,50);
 
         for(int i = 10; i<1441; i=i+10){
         }
@@ -42,7 +48,6 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
                     for (int i = 0; i<myRects.size();i++) {
                         if (rectContains(myRects.get(i), (int) MouseInfo.getPointerInfo().getLocation().getX() - 720, -(int) MouseInfo.getPointerInfo().getLocation().getY() + 470)) {
                             myRects.remove(i);
-                            colors.remove(i);
                             i--;
                             repaint();
                         }
@@ -51,7 +56,6 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
                 if(isKeyPressed(KeyEvent.VK_BACK_SPACE)){
                     if(myRects.size()>0 && recentlyDeleted==0) {
                         myRects.remove(myRects.size() - 1);
-                        colors.remove(colors.size()-1);
                         recentlyDeleted=50;
                         repaint();
                     }
@@ -68,6 +72,19 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
                 if(isKeyPressed(KeyEvent.VK_3)){
                     color = Color.blue;
                 }
+                if(isKeyPressed(KeyEvent.VK_S)){
+                    LevelController lc = new LevelController();
+                    lc.writeLevel(myRects);
+                }
+                if(isKeyPressed(KeyEvent.VK_UP)){
+                    if (drawMode<4){
+                        drawMode++;
+                    }
+                    else{
+                        drawMode = 0;
+                    }
+                }
+
             }
         });
 
@@ -101,11 +118,20 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
 
 
         for (int i = 0; i < myRects.size();i++) {
-            g2.setColor(colors.get(i));
+            g2.setColor(myRects.get(i).getColor());
             g2.fill(myRects.get(i));
         }
         g2.setColor(color);
         g2.draw(outline);
+
+        g2.setColor(Color.orange);
+        g2.fillRect((int)lankySpawn.getX(),(int)lankySpawn.getY(),10,10);
+
+        g2.setColor(Color.green);
+        g2.fillRect((int)squatSpawn.getX(),(int)squatSpawn.getY(),10,10);
+
+        g2.setColor(Color.pink);
+        g2.fillRect((int)goal.getX(),(int)goal.getY(),10,10);
     }
 
     @Override
@@ -116,19 +142,35 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
 
     @Override
     public void mousePressed(MouseEvent e) {
-        rectX = round(e.getX() - 720);
-        rectY = round(-e.getY() + 425);
+        if(drawMode == 0) {
+            rectX = round(e.getX() - 720);
+            rectY = round(-e.getY() + 425);
+        }
+        else if(drawMode==1){
+            lankySpawn.setLocation(e.getX() - 720,-e.getY() + 425);
+            repaint();
+
+        }
+        else if(drawMode==2){
+            squatSpawn.setLocation(e.getX() - 720,-e.getY() + 425);
+            repaint();
+        }
+        else{
+            goal.setLocation(e.getX() - 720,-e.getY() + 425);
+            repaint();
+        }
 
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        width = round(e.getX() - rectX - 720);
-        height = round(-e.getY() + 425 - rectY);
-        myRects.add(new Rectangle(rectX, rectY, width, height));
-        colors.add(color);
-        outline.setSize(-1,-1);
-        repaint();
+        if(drawMode == 0) {
+            width = round(e.getX() - rectX - 720);
+            height = round(-e.getY() + 425 - rectY);
+            myRects.add(new ColoredRectangle(rectX, rectY, width, height, color));
+            outline.setSize(-1, -1);
+            repaint();
+        }
 
 
     }
@@ -163,10 +205,12 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        width = round(e.getX() - rectX - 720);
-        height = round(-e.getY() + 425 - rectY);
-        outline.setBounds(rectX, rectY, width, height);
-        repaint();
+        if(drawMode == 0) {
+            width = round(e.getX() - rectX - 720);
+            height = round(-e.getY() + 425 - rectY);
+            outline.setBounds(rectX, rectY, width, height);
+            repaint();
+        }
     }
 
     @Override
