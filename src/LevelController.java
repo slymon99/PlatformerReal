@@ -11,7 +11,7 @@ public class LevelController {
 
     private int nextLevel;
 
-    public LevelController(){
+    public LevelController() {
         nextLevel = 0;
     }
 
@@ -38,24 +38,19 @@ public class LevelController {
 
     public void writeLevel(ArrayList<ColoredRectangle> rects) {
 
+        try {
+            PrintWriter writer = new PrintWriter("level/" + Integer.toString(nextLevel) + ".txt", "UTF-8");
 
-        BufferedWriter bw = null;
-        FileWriter fw = null;
-
-
-            try {
-                PrintWriter writer = new PrintWriter("level/" + Integer.toString(nextLevel)+ ".txt", "UTF-8");
-
-                for (ColoredRectangle rect : rects) {
-                    writer.println(rect.encodeString());
-                }
-
-                writer.close();
-            } catch (IOException e) {
-                // do something
+            for (ColoredRectangle rect : rects) {
+                writer.println(rect.encodeString());
             }
 
-            nextLevel++;
+            writer.close();
+        } catch (IOException e) {
+            // do something
+        }
+
+        nextLevel++;
 
     }
 

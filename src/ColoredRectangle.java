@@ -29,7 +29,7 @@ public class ColoredRectangle extends Rectangle{
             result+="spikes";
         }
         else if(getColor().equals(Color.black)){
-            result+="movingplatform";
+            result+="movingPlatform";
         }
 
         return result;
