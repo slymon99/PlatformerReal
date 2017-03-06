@@ -29,6 +29,8 @@ public class GamePanel extends JPanel implements KeyListener {
     private long last;
     private boolean[] keys;
 
+    private LevelController lc;
+
     public static final double NANO_TO_BASE = 1.0e9;
 
     public static final double SCALE = 10.0;
@@ -45,6 +47,7 @@ public class GamePanel extends JPanel implements KeyListener {
         // setup the world
         this.initializeWorld();
 
+        lc  = new LevelController();
 
     }
 
@@ -65,29 +68,13 @@ public class GamePanel extends JPanel implements KeyListener {
         floor.translate(0.0, -4.0);
         this.world.addBody(floor);
 
-
-
-        // create a triangle object
-//        Triangle triShape = new Triangle(
-//                new Vector2(0.0, 0.5),
-//                new Vector2(-0.5, -0.5),
-//                new Vector2(0.5, -0.5));
-//        Player triangle = new Player(Color.green);
-//        triangle.addFixture(triShape);
-//        Mass m = new Mass(new Vector2(0,0),20.0,20.0);
-//        triangle.setMass(m);
-//        triangle.translate(-1.0, 2.0);
-//        // test having a velocity
-//        triangle.getLinearVelocity().set(5.0, 0.0);
-//        world.addSquat(triangle);
+        //makes squat
         Rectangle squatRect = new Rectangle(1.5, 1.5);
         Player squat = new Player(Color.GREEN);
         squat.addFixture(squatRect, 0.5, 0.2, 0);
         Mass squatMass = new Mass(new Vector2(0, 0), 10, 1);
         squat.setMass(squatMass);
         squat.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
-
-
         world.addSquat(squat);
 
         //makes lanky
@@ -97,12 +84,21 @@ public class GamePanel extends JPanel implements KeyListener {
         Mass lankyMass = new Mass(new Vector2(0, 0), 10, 1);
         lanky.setMass(lankyMass);
         lanky.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
-
         world.addLanky(lanky);
 
+        //testing platforms
         MovingPlatform testMovePlatform = new MovingPlatform(new Vector2(-5, 5), new Vector2(-5, 5), new Vector2(0, 0), 5, 1, 1);
         world.addBody(testMovePlatform);
         movingPlatforms.add(testMovePlatform);
+
+        Platform p = new Platform(-10,5,5,5);
+        world.addBody(p);
+
+        //loads first level
+        ArrayList<GameObject> levelOne = lc.readLevel(1);
+        for(GameObject o: levelOne){
+            world.addBody(o);
+        }
 
 
 

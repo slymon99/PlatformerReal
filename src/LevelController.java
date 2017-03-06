@@ -7,24 +7,24 @@ import java.util.ArrayList;
  */
 public class LevelController {
 
-    private ArrayList<Level> levels;
-
     private int nextLevel;
 
     public LevelController() {
         nextLevel = 0;
     }
 
-    public ArrayList<GameObject> readLevel(int level) {
+    public ArrayList<GameObject> readLevel(int levelNum) {
+
+        ArrayList<GameObject> level = new ArrayList<GameObject>();
 
         BufferedReader fileReader;
         try {
-            fileReader = new BufferedReader(new FileReader("level/" + Integer.toString(level) + ".txt"));
+            fileReader = new BufferedReader(new FileReader("level/" + Integer.toString(levelNum) + ".txt"));
 
             String in = fileReader.readLine();
 
             while (in != null) {
-                parseLine(in);
+                level.add(parseLine(in));
                 in = fileReader.readLine();
             }
 
@@ -32,7 +32,7 @@ public class LevelController {
             System.out.println("File " + " nonresponding");
         }
 
-        return null;
+        return level;
 
     }
 
@@ -54,17 +54,22 @@ public class LevelController {
 
     }
 
-    private Level parseLine(String in) {
-        Level l = new Level();
-
+    private GameObject parseLine(String in) {
         String[] line = in.split(" ");
-        if (line[0] == "m") {
+        double[] values = new double[line.length-1];
 
+        for (int j = 1; j < values.length; j++) {
+            values[j] = Double.parseDouble(line[j+1]);
         }
 
-        if (line[0] == "p") {
+        if (line[0].equals("platform")) {
+            return(new Platform(values[0], values[1], values[2], values[3]));
 
         }
-        return null;
+        else{
+            System.out.println("Error parsing line - unknown type \"" + line[0] + "\"");
+            return null;
+        }
+
     }
 }
