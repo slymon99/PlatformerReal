@@ -16,7 +16,6 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
     private boolean[] keys;
     private Rectangle outline;
     private Timer t;
-    private int mouseX, mouseY;
     private int recentlyDeleted;
     private Color color;
     private Point lankySpawn;
@@ -215,9 +214,7 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        mouseX = e.getX();
-        mouseY = e.getY();
-//        System.out.println(mouseX + " " + mouseY);
+
     }
 
     private static int round(int n) {
