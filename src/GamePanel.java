@@ -33,7 +33,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
     public static final double NANO_TO_BASE = 1.0e9;
 
-    public static final double SCALE = 10.0;
+    public static final double SCALE = 40.0;
 
     public GamePanel() {
         keys = new boolean[1000];
