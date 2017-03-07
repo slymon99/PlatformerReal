@@ -95,7 +95,7 @@ public class GamePanel extends JPanel implements KeyListener {
         world.addBody(p);
 
         //loads first level
-        ArrayList<GameObject> levelOne = lc.readLevel(1);
+        ArrayList<GameObject> levelOne = lc.readLevel(0);
         for(GameObject o: levelOne){
             world.addBody(o);
         }

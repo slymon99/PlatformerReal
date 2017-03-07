@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -18,6 +17,7 @@ public class LevelController {
         ArrayList<GameObject> level = new ArrayList<GameObject>();
 
         BufferedReader fileReader;
+
         try {
             fileReader = new BufferedReader(new FileReader("level/" + Integer.toString(levelNum) + ".txt"));
 
@@ -63,7 +63,7 @@ public class LevelController {
         }
 
         if (line[0].equals("platform")) {
-            return(new Platform(values[0], values[1], values[2], values[3]));
+            return(new Platform(values[0]/15, values[1]/15, values[2]/15, values[3]/15));
 
         }
         else{
