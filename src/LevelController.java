@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -14,10 +13,12 @@ public class LevelController {
     }
 
     public ArrayList<GameObject> readLevel(int levelNum) {
+        System.out.println("reading level...");
 
         ArrayList<GameObject> level = new ArrayList<GameObject>();
 
         BufferedReader fileReader;
+
         try {
             fileReader = new BufferedReader(new FileReader("level/" + Integer.toString(levelNum) + ".txt"));
 
@@ -32,6 +33,7 @@ public class LevelController {
             System.out.println("File " + " nonresponding");
         }
 
+
         return level;
 
     }
@@ -39,7 +41,7 @@ public class LevelController {
     public void writeLevel(ArrayList<ColoredRectangle> rects) {
 
         try {
-            PrintWriter writer = new PrintWriter("level/" + Integer.toString(nextLevel) + ".txt", "UTF-8");
+            PrintWriter writer = new PrintWriter("levelDrafts/" + Integer.toString(nextLevel) + ".txt", "UTF-8");
 
             for (ColoredRectangle rect : rects) {
                 writer.println(rect.encodeString());
@@ -56,14 +58,21 @@ public class LevelController {
 
     private GameObject parseLine(String in) {
         String[] line = in.split(" ");
+
+
+        System.out.println("reading line length: " + line.length);
+
         double[] values = new double[line.length-1];
 
-        for (int j = 1; j < values.length; j++) {
+        System.out.println("values length " + values.length);
+
+        for (int j = 0; j < values.length; j++) {
+            System.out.println(j);
             values[j] = Double.parseDouble(line[j+1]);
         }
 
         if (line[0].equals("platform")) {
-            return(new Platform(values[0]/15, values[1]/15, values[2]/15, values[3]/15));
+            return(new Platform(values[0], values[1], values[2], values[3]));
 
         }
         else{
