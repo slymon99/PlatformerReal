@@ -29,7 +29,7 @@ public class ColoredRectangle extends Rectangle {
         } else if (getColor().equals(Color.black)) {
             result += "movingPlatform";
         }
-        result += " " + getX()/15 + " " + getY()/15 + " " + getWidth()/15 + " " + getHeight()/15 + " ";
+        result += " " + (getX()+(getWidth()/2))/15 + " " + (getY()+(getHeight()/2))/15 + " " + getWidth()/15 + " " + getHeight()/15 + " ";
 
 
         return result;
