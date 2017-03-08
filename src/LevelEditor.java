@@ -16,12 +16,13 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
     private boolean[] keys;
     private Rectangle outline;
     private Timer t;
-    private int recentlyDeleted;
+    private int cooldown;
     private Color color;
     private Point lankySpawn;
     private Point squatSpawn;
     private Point goal;
     private int drawMode;
+
 
 
     public LevelEditor() {
@@ -32,7 +33,7 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
         outline = new Rectangle();
         myRects = new ArrayList<ColoredRectangle>();
         color = Color.black;
-        int drawmode = 0;
+        drawMode = 0;
         lankySpawn = new Point(1400,30);
         squatSpawn = new Point(1400,40);
         goal = new Point(1400,50);
@@ -53,35 +54,41 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
                     }
                 }
                 if(isKeyPressed(KeyEvent.VK_BACK_SPACE)){
-                    if(myRects.size()>0 && recentlyDeleted==0) {
+                    if(myRects.size()>0 && cooldown==0) {
                         myRects.remove(myRects.size() - 1);
-                        recentlyDeleted=50;
+                        cooldown=50;
                         repaint();
                     }
                 }
-                if(recentlyDeleted>0){
-                    recentlyDeleted--;
+                if(cooldown>0){
+                    cooldown--;
                 }
                 if(isKeyPressed(KeyEvent.VK_1)){
                     color = Color.black;
+                    repaint();
                 }
                 if(isKeyPressed(KeyEvent.VK_2)){
                     color = Color.red;
+                    repaint();
                 }
                 if(isKeyPressed(KeyEvent.VK_3)){
                     color = Color.blue;
+                    repaint();
                 }
-                if(isKeyPressed(KeyEvent.VK_S)){
+                if(isKeyPressed(KeyEvent.VK_S) && cooldown==0){
                     LevelController lc = new LevelController();
                     lc.writeLevel(myRects);
+                    cooldown=50;
                 }
-                if(isKeyPressed(KeyEvent.VK_UP)){
-                    if (drawMode<4){
+                if(isKeyPressed(KeyEvent.VK_UP) && cooldown==0){
+                    if (drawMode<3){
                         drawMode++;
                     }
                     else{
                         drawMode = 0;
                     }
+                    cooldown=25;
+                    repaint();
                 }
 
             }
@@ -131,6 +138,21 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
 
         g2.setColor(Color.pink);
         g2.fillRect((int)goal.getX(),(int)goal.getY(),10,10);
+
+        if(drawMode == 0) {
+            g2.setColor(color);
+        }
+        else if(drawMode==1){
+            g2.setColor(Color.orange);
+        }
+        else if(drawMode==2){
+            g2.setColor(Color.green);
+        }
+        else{
+            g2.setColor(Color.pink);
+        }
+
+        g2.fillRect(700,380,20,20);
     }
 
     @Override
