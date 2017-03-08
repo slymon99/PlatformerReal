@@ -40,6 +40,7 @@ public class GamePanel extends JPanel implements KeyListener {
         addKeyListener(this);
 
         movingPlatforms = new ArrayList<MovingPlatform>();
+        lc  = new LevelController();
 
         // make sure we are not stopped
         this.stopped = false;
@@ -47,18 +48,12 @@ public class GamePanel extends JPanel implements KeyListener {
         // setup the world
         this.initializeWorld();
 
-        lc  = new LevelController();
+
 
     }
 
     public void initializeWorld() {
         world = new GameWorld();
-
-        LevelController lc = new LevelController();
-        lc.readLevel(1);
-        ArrayList<ColoredRectangle> rects = new ArrayList<ColoredRectangle>();
-        rects.add(new ColoredRectangle(1,2,3,4,Color.red));
-        lc.writeLevel(rects);
 
         Rectangle floorRect = new Rectangle(15.0, 7.0);
         GameObject floor = new GameObject();
@@ -91,10 +86,8 @@ public class GamePanel extends JPanel implements KeyListener {
         world.addBody(testMovePlatform);
         movingPlatforms.add(testMovePlatform);
 
-        Platform p = new Platform(-10,5,5,5);
-        world.addBody(p);
-
         //loads first level
+        System.out.println("preparing array from levelController");
         ArrayList<GameObject> levelOne = lc.readLevel(0);
         for(GameObject o: levelOne){
             world.addBody(o);
