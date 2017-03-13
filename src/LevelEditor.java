@@ -188,7 +188,9 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
         if(drawMode == 0) {
             width = round(e.getX() - rectX - 720);
             height = round(-e.getY() + 425 - rectY);
-            myRects.add(new ColoredRectangle(rectX, rectY, width, height, color));
+            if(height>0 && width >0) {
+                myRects.add(new ColoredRectangle(rectX, rectY, width, height, color));
+            }
             outline.setSize(-1, -1);
             repaint();
         }

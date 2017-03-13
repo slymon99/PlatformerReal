@@ -30,7 +30,7 @@ public class LevelController {
             }
 
         } catch (Exception e) {
-            System.out.println("File " + " nonresponding");
+            System.out.println("File " + "nonresponding");
         }
 
 
@@ -59,23 +59,16 @@ public class LevelController {
     private GameObject parseLine(String in) {
         String[] line = in.split(" ");
 
-
-        System.out.println("reading line length: " + line.length);
-
-        double[] values = new double[line.length-1];
-
-        System.out.println("values length " + values.length);
+        double[] values = new double[line.length - 1];
 
         for (int j = 0; j < values.length; j++) {
-            System.out.println(j);
-            values[j] = Double.parseDouble(line[j+1]);
+            values[j] = Double.parseDouble(line[j + 1]);
         }
 
         if (line[0].equals("platform")) {
-            return(new Platform(values[0], values[1], values[2], values[3]));
-
-        }
-        else{
+            System.out.println("making a platform");
+            return (new Platform(values[0], values[1], values[2], values[3]));
+        } else {
             System.out.println("Error parsing line - unknown type \"" + line[0] + "\"");
             return null;
         }

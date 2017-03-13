@@ -55,13 +55,13 @@ public class GamePanel extends JPanel implements KeyListener {
     public void initializeWorld() {
         world = new GameWorld();
 
-        Rectangle floorRect = new Rectangle(15.0, 7.0);
-        GameObject floor = new GameObject();
-        floor.addFixture(new BodyFixture(floorRect));
-        floor.setMass(MassType.INFINITE);
-        // move the floor down a bit
-        floor.translate(0.0, -4.0);
-        this.world.addBody(floor);
+//        Rectangle floorRect = new Rectangle(15.0, 7.0);
+//        GameObject floor = new GameObject();
+//        floor.addFixture(new BodyFixture(floorRect));
+//        floor.setMass(MassType.INFINITE);
+//        // move the floor down a bit
+//        floor.translate(0.0, -4.0);
+//        this.world.addBody(floor);
 
         //makes squat
         Rectangle squatRect = new Rectangle(1.5, 1.5);
@@ -82,9 +82,9 @@ public class GamePanel extends JPanel implements KeyListener {
         world.addLanky(lanky);
 
         //testing platforms
-        MovingPlatform testMovePlatform = new MovingPlatform(new Vector2(-5, 5), new Vector2(-5, 5), new Vector2(0, 0), 5, 1, 1);
-        world.addBody(testMovePlatform);
-        movingPlatforms.add(testMovePlatform);
+//        MovingPlatform testMovePlatform = new MovingPlatform(new Vector2(-5, 5), new Vector2(-5, 5), new Vector2(0, 0), 5, 1, 1);
+//        world.addBody(testMovePlatform);
+//        movingPlatforms.add(testMovePlatform);
 
         //loads first level
         System.out.println("preparing array from levelController");
