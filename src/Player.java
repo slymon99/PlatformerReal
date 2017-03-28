@@ -32,4 +32,9 @@ public class Player extends GameObject {
     public boolean canJump() {
         return (ticksSinceJumped > 30 );
     }
+
+    public void slowDown(double time){
+        setLinearVelocity(getLinearVelocity().setMagnitude(getLinearVelocity().getMagnitude()-1));
+
+    }
 }
