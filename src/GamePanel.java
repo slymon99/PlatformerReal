@@ -66,7 +66,7 @@ public class GamePanel extends JPanel implements KeyListener {
         //makes squat
         Rectangle squatRect = new Rectangle(1.5, 1.5);
         Player squat = new Player(Color.GREEN);
-        squat.addFixture(squatRect, 0.5, .5, 0);
+        squat.addFixture(squatRect, 0.5, .75, 0);
         Mass squatMass = new Mass(new Vector2(0, 0), 10, 1);
         squat.setMass(squatMass);
         squat.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
@@ -75,7 +75,7 @@ public class GamePanel extends JPanel implements KeyListener {
         //makes lanky
         Rectangle lankyRect = new Rectangle(1, 3);
         Player lanky = new Player(Color.BLUE);
-        lanky.addFixture(lankyRect, 0.5, .5, 0);
+        lanky.addFixture(lankyRect, 0.5, .75, 0);
         Mass lankyMass = new Mass(new Vector2(0, 0), 10, 1);
         lanky.setMass(lankyMass);
         lanky.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
@@ -240,10 +240,10 @@ public class GamePanel extends JPanel implements KeyListener {
         Player lanky = world.getLanky();
         Player squat = world.getSquat();
 
-        if (isKeyPressed(KeyEvent.VK_A) && squat.getLinearVelocity().getXComponent().getMagnitude() < 10) {
+        if (isKeyPressed(KeyEvent.VK_A) && squat.getLinearVelocity().x > -10) {
             squat.applyForce(new Force(-10, 0));
         }
-        if (isKeyPressed(KeyEvent.VK_D) && squat.getLinearVelocity().getXComponent().getMagnitude() < 10) {
+        if (isKeyPressed(KeyEvent.VK_D) && squat.getLinearVelocity().x < 10) {
             squat.applyForce(new Force(10, 0));
         }
 
@@ -255,10 +255,10 @@ public class GamePanel extends JPanel implements KeyListener {
             squat.jump();
         }
 
-        if (isKeyPressed(KeyEvent.VK_LEFT)) {
+        if (isKeyPressed(KeyEvent.VK_LEFT) && lanky.getLinearVelocity().x > -10) {
             lanky.applyForce(new Force(-9, 0));
         }
-        if (isKeyPressed(KeyEvent.VK_RIGHT)) {
+        if (isKeyPressed(KeyEvent.VK_RIGHT) && lanky.getLinearVelocity().x < 10) {
             lanky.applyForce(new Force(9, 0));
         }
 
