@@ -25,6 +25,7 @@ public class GamePanel extends JPanel implements KeyListener {
     private GameWorld world;
 
     private ArrayList<MovingPlatform> movingPlatforms;
+    private ArrayList<Lava> lavaPlatforms;
 
     private long last;
     private boolean[] keys;
@@ -40,6 +41,7 @@ public class GamePanel extends JPanel implements KeyListener {
         addKeyListener(this);
 
         movingPlatforms = new ArrayList<MovingPlatform>();
+        lavaPlatforms = new ArrayList<Lava>();
         lc  = new LevelController();
 
         // make sure we are not stopped
@@ -92,6 +94,8 @@ public class GamePanel extends JPanel implements KeyListener {
         for(GameObject o: levelOne){
             world.addBody(o);
         }
+
+        Lava testLava = new Lava(0,0,5,5);
 
 
 
@@ -316,6 +320,10 @@ public class GamePanel extends JPanel implements KeyListener {
         for (MovingPlatform p : movingPlatforms) {
             p.update();
         }
+    }
+
+    private void resetLevel(){
+
     }
 
     @Override
