@@ -1,6 +1,9 @@
+import org.dyn4j.collision.manifold.Manifold;
+import org.dyn4j.collision.narrowphase.Penetration;
 import org.dyn4j.collision.narrowphase.Raycast;
 import org.dyn4j.dynamics.*;
 import org.dyn4j.dynamics.World;
+import org.dyn4j.dynamics.contact.ContactConstraint;
 import org.dyn4j.geometry.*;
 
 import javax.swing.*;
@@ -19,12 +22,13 @@ import org.dyn4j.geometry.Vector2;
 /**
  * Created by Simon on 12/3/2016.
  */
-public class GamePanel extends JPanel implements KeyListener {
+public class GamePanel extends JPanel implements KeyListener{
 
     private boolean stopped;
     private GameWorld world;
 
     private ArrayList<MovingPlatform> movingPlatforms;
+    private ArrayList<Lava> lavaPlatforms;
 
     private long last;
     private boolean[] keys;
@@ -39,15 +43,16 @@ public class GamePanel extends JPanel implements KeyListener {
         keys = new boolean[1000];
         addKeyListener(this);
 
+
         movingPlatforms = new ArrayList<MovingPlatform>();
-        lc  = new LevelController();
+        lavaPlatforms = new ArrayList<Lava>();
+        lc = new LevelController();
 
         // make sure we are not stopped
         this.stopped = false;
 
         // setup the world
         this.initializeWorld();
-
 
 
     }
@@ -91,10 +96,12 @@ public class GamePanel extends JPanel implements KeyListener {
         //loads first level
         System.out.println("preparing array from levelController");
         ArrayList<GameObject> levelOne = lc.readLevel(0);
-        for(GameObject o: levelOne){
+        for (GameObject o : levelOne) {
             world.addBody(o);
         }
 
+        Lava testLava = new Lava(-10, -2, 7, 5);
+        world.addBody(testLava);
 
 
 //        world.raycast()
@@ -234,6 +241,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
         world.update(elapsedTime);
         updateAllPlatforms();
+        checkDeathCollisions();
 
         repaint();
     }
@@ -251,7 +259,10 @@ public class GamePanel extends JPanel implements KeyListener {
         }
 
         ArrayList<RaycastResult> result = new ArrayList<RaycastResult>(); //no idea what this does
-        boolean canJump = world.raycast(squat.getJumpDetectionRay(), 0.78, false, false, true, result) && squat.canJump();
+        boolean leftSideClearSquat = world.raycast(world.getSquat().getJumpDetectionRayLeft(), .78, false, false, true, result);
+        boolean rightSideClearSquat = world.raycast(world.getSquat().getJumpDetectionRayRight(), .78, false, false, true, result);
+        boolean middleClearSquat = world.raycast(world.getSquat().getJumpDetectionRay(), .78, false, false, true, result);
+        boolean canJump = (leftSideClearSquat || rightSideClearSquat || middleClearSquat) && squat.canJump();
 
         if (isKeyPressed(KeyEvent.VK_W) && canJump) {
             squat.applyImpulse(new Vector2(0, 90));
@@ -266,12 +277,18 @@ public class GamePanel extends JPanel implements KeyListener {
         }
 
         ArrayList<RaycastResult> result2 = new ArrayList<RaycastResult>(); //no idea what this does
-        boolean canJump2 = world.raycast(world.getLanky().getJumpDetectionRay(), 1.6, false, false, true, result2) && lanky.canJump();
+        boolean leftSideClear = world.raycast(world.getLanky().getJumpDetectionRayLeft(), 1.6, false, false, true, result2);
+        boolean rightSideClear = world.raycast(world.getLanky().getJumpDetectionRayRight(), 1.6, false, false, true, result2);
+        boolean middleClear = world.raycast(world.getLanky().getJumpDetectionRayRight(), 1.6, false, false, true, result2);
+        boolean canJump2 = (leftSideClear || rightSideClear || middleClear) && lanky.canJump();
 
         if (isKeyPressed(KeyEvent.VK_UP) && canJump2) {
             lanky.applyImpulse(new Vector2(0, 90));
             lanky.jump();
         }
+
+//        System.out.println(lanky.getJumpDetectionRay().toString() + " " + lanky.getJumpDetectionRayLeft().toString());
+//        System.out.println;
 
         squat.tickUp();
         lanky.tickUp();
@@ -319,6 +336,16 @@ public class GamePanel extends JPanel implements KeyListener {
         for (MovingPlatform p : movingPlatforms) {
             p.update();
         }
+    }
+
+    private void checkDeathCollisions(){
+        for(Lava l: lavaPlatforms){
+//            world.raycast(Player)
+        }
+    }
+
+    private void resetLevel() {
+
     }
 
     @Override
