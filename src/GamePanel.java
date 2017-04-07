@@ -70,6 +70,7 @@ public class GamePanel extends JPanel implements KeyListener {
         Mass squatMass = new Mass(new Vector2(0, 0), 10, 1);
         squat.setMass(squatMass);
         squat.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
+        squat.translate(-39,28);
         world.addSquat(squat);
 
         //makes lanky
@@ -79,6 +80,7 @@ public class GamePanel extends JPanel implements KeyListener {
         Mass lankyMass = new Mass(new Vector2(0, 0), 10, 1);
         lanky.setMass(lankyMass);
         lanky.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
+        lanky.translate(-39,28);
         world.addLanky(lanky);
 
         //testing platforms
@@ -110,13 +112,14 @@ public class GamePanel extends JPanel implements KeyListener {
 //        this.world.addBody(circle);
 //
 //        // try a rectangle
-//        Rectangle rectShape = new Rectangle(1.0, 1.0);
-//        GameObject rectangle = new GameObject();
-//        rectangle.addFixture(rectShape);
-//        rectangle.setMass(MassType.NORMAL);
-//        rectangle.translate(0.0, 2.0);
-//        rectangle.getLinearVelocity().set(-5.0, 0.0);
-//        this.world.addBody(rectangle);
+        for(int i = 0; i<25; i++) {
+            Circle rectShape = new Circle(1.0);
+            GameObject rectangle = new GameObject();
+            rectangle.addFixture(rectShape);
+            rectangle.setMass(MassType.NORMAL);
+            rectangle.translate(10.0, 10.0);
+            this.world.addBody(rectangle);
+        }
 //
 //        // try a polygon with lots of vertices
 //        Polygon polyShape = Geometry.createUnitCirclePolygon(10, 1.0);
@@ -251,7 +254,7 @@ public class GamePanel extends JPanel implements KeyListener {
         boolean canJump = world.raycast(squat.getJumpDetectionRay(), 0.78, false, false, true, result) && squat.canJump();
 
         if (isKeyPressed(KeyEvent.VK_W) && canJump) {
-            squat.applyImpulse(new Vector2(0, 100));
+            squat.applyImpulse(new Vector2(0, 90));
             squat.jump();
         }
 
@@ -266,7 +269,7 @@ public class GamePanel extends JPanel implements KeyListener {
         boolean canJump2 = world.raycast(world.getLanky().getJumpDetectionRay(), 1.6, false, false, true, result2) && lanky.canJump();
 
         if (isKeyPressed(KeyEvent.VK_UP) && canJump2) {
-            lanky.applyImpulse(new Vector2(0, 100));
+            lanky.applyImpulse(new Vector2(0, 90));
             lanky.jump();
         }
 

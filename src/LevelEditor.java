@@ -94,6 +94,8 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
             }
         });
 
+
+
         t.start();
     }
 
@@ -116,6 +118,15 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
 
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+
+        g2.setColor(new Color(0xE2CAC9));
+        for(int i = 0; i<144; i++){
+            g2.drawLine(i*10,0,i*10,850);
+        }
+
+        for(int j = 0; j<85; j++){
+            g2.drawLine(0,j*10+5,1440,j*10+5);
+        }
 
         AffineTransform yFlip = AffineTransform.getScaleInstance(1, -1);
         AffineTransform move = AffineTransform.getTranslateInstance(720, -425);
