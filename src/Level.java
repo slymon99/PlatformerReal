@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -5,16 +6,39 @@ import java.util.ArrayList;
  */
 public class Level {
     private ArrayList<GameObject> objects;
+    private Point squat, lanky, goal;
 
-    public Level() {
-        objects = new ArrayList<GameObject>();
+    public Level(ArrayList<GameObject> obj) {
+        objects = obj;
     }
 
-    public void addGameObject(GameObject g){
-        objects.add(g);
+    public void setObjects(ArrayList<GameObject> arr){
+        objects = arr;
     }
 
     public ArrayList<GameObject> getObjects() {
         return objects;
+    }
+
+    public void setInfo(Point s, Point l , Point g){
+        squat = s;
+        lanky = l;
+        goal = g;
+    }
+
+    public Point getSquatPoint() {
+        return squat;
+    }
+
+    public Point getLankyPoint() {
+        return lanky;
+    }
+
+    public Point getGoalPoint() {
+        return goal;
+    }
+
+    public void InfoToString(){
+        System.out.println(squat + " " + lanky + " " + goal);
     }
 }

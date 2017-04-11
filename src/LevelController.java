@@ -13,30 +13,52 @@ public class LevelController {
         nextLevel = 0;
     }
 
-    public ArrayList<GameObject> readLevel(int levelNum) {
+    public Level readLevel(int levelNum) {
         System.out.println("reading level...");
 
-        ArrayList<GameObject> level = new ArrayList<GameObject>();
+        ArrayList<GameObject> levelObjects = new ArrayList<GameObject>();
 
         BufferedReader fileReader;
+
+        Point s = new Point();
+        Point l = new Point();
+        Point g = new Point();
 
         try {
             fileReader = new BufferedReader(new FileReader("level/" + Integer.toString(levelNum) + ".txt"));
 
             String in = fileReader.readLine();
 
+            s = parseInfo(in);
+            System.out.println(in);
+            in = fileReader.readLine();
+
+
+            l = parseInfo(in);
+            System.out.println(in);
+            in = fileReader.readLine();
+
+
+            g = parseInfo(in);
+            System.out.println(in);
+            in = fileReader.readLine();
+
+
             while (in != null) {
-                level.add(parseLine(in));
+                levelObjects.add(parsePlatform(in));
                 in = fileReader.readLine();
             }
 
         } catch (Exception e) {
             System.out.println("File " + "nonresponding");
+            e.printStackTrace();
         }
 
 
-        return level;
+        Level levelToReturn = new Level(levelObjects);
+        levelToReturn.setInfo(s, l, g);
 
+        return (levelToReturn);
     }
 
     public void writeLevel(ArrayList<ColoredRectangle> rects, Point lankySpawn, Point squatSpawn, Point goal) {
@@ -44,13 +66,16 @@ public class LevelController {
         try {
             PrintWriter writer = new PrintWriter("levelDrafts/" + Integer.toString(nextLevel) + ".txt", "UTF-8");
 
+
+            writer.println("Squat " + squatSpawn.getX() / 15 + " " + squatSpawn.getY() / 15);
+            writer.println("Lanky " + lankySpawn.getX() / 15 + " " + lankySpawn.getY() / 15);
+            writer.println("Goal " + goal.getX() / 15 + " " + goal.getY() / 15);
+
+
             for (ColoredRectangle rect : rects) {
                 writer.println(rect.encodeString());
             }
 
-            writer.println("Lanky " + lankySpawn.getX()/15 + " " + lankySpawn.getY()/15);
-            writer.println("Squat " + squatSpawn.getX()/15 + " " + squatSpawn.getY()/15);
-            writer.println("Goal " + goal.getX()/15 + " " + goal.getY()/15);
 
             writer.close();
         } catch (IOException e) {
@@ -61,7 +86,7 @@ public class LevelController {
 
     }
 
-    private GameObject parseLine(String in) {
+    private GameObject parsePlatform(String in) {
         String[] line = in.split(" ");
 
         double[] values = new double[line.length - 1];
@@ -77,5 +102,17 @@ public class LevelController {
             return null;
         }
 
+    }
+
+    private Point parseInfo(String in) {
+        String[] line = in.split(" ");
+
+        double[] values = new double[line.length - 1];
+
+        for (int j = 0; j < values.length; j++) {
+            values[j] = Double.parseDouble(line[j + 1]);
+        }
+
+        return (new Point((int) (values[0]), (int) (values[1])));
     }
 }

@@ -95,7 +95,9 @@ public class GamePanel extends JPanel implements KeyListener{
 
         //loads first level
         System.out.println("preparing array from levelController");
-        ArrayList<GameObject> levelOne = lc.readLevel(0);
+        ArrayList<GameObject> levelOne = lc.readLevel(0).getObjects();
+        lc.readLevel(0).getObjects().toString();
+
         for (GameObject o : levelOne) {
             world.addBody(o);
         }
