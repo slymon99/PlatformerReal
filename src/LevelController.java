@@ -30,17 +30,12 @@ public class LevelController {
             String in = fileReader.readLine();
 
             s = parseInfo(in);
-            System.out.println(in);
             in = fileReader.readLine();
-
 
             l = parseInfo(in);
-            System.out.println(in);
             in = fileReader.readLine();
 
-
             g = parseInfo(in);
-            System.out.println(in);
             in = fileReader.readLine();
 
 
