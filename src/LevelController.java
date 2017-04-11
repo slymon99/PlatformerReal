@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -38,7 +39,7 @@ public class LevelController {
 
     }
 
-    public void writeLevel(ArrayList<ColoredRectangle> rects) {
+    public void writeLevel(ArrayList<ColoredRectangle> rects, Point lankySpawn, Point squatSpawn, Point goal) {
 
         try {
             PrintWriter writer = new PrintWriter("levelDrafts/" + Integer.toString(nextLevel) + ".txt", "UTF-8");
@@ -46,6 +47,10 @@ public class LevelController {
             for (ColoredRectangle rect : rects) {
                 writer.println(rect.encodeString());
             }
+
+            writer.println("Lanky " + lankySpawn.getX()/15 + " " + lankySpawn.getY()/15);
+            writer.println("Squat " + squatSpawn.getX()/15 + " " + squatSpawn.getY()/15);
+            writer.println("Goal " + goal.getX()/15 + " " + goal.getY()/15);
 
             writer.close();
         } catch (IOException e) {

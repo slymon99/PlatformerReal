@@ -77,7 +77,7 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
                 }
                 if(isKeyPressed(KeyEvent.VK_S) && cooldown==0){
                     LevelController lc = new LevelController();
-                    lc.writeLevel(myRects);
+                    lc.writeLevel(myRects, lankySpawn, squatSpawn, goal);
                     cooldown=50;
                 }
                 if(isKeyPressed(KeyEvent.VK_UP) && cooldown==0){

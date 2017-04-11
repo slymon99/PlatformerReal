@@ -119,14 +119,15 @@ public class GamePanel extends JPanel implements KeyListener{
 //        this.world.addBody(circle);
 //
 //        // try a rectangle
-        for(int i = 0; i<25; i++) {
+//        for(int i = 0; i<100; i++) {
             Circle rectShape = new Circle(1.0);
             GameObject rectangle = new GameObject();
-            rectangle.addFixture(rectShape);
+            rectangle.addFixture(rectShape, 0.5,.2, .3);
             rectangle.setMass(MassType.NORMAL);
-            rectangle.translate(10.0, 10.0);
+            rectangle.translate(0, 10.0);
+
             this.world.addBody(rectangle);
-        }
+//        }
 //
 //        // try a polygon with lots of vertices
 //        Polygon polyShape = Geometry.createUnitCirclePolygon(10, 1.0);
