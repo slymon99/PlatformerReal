@@ -95,12 +95,22 @@ public class GamePanel extends JPanel implements KeyListener{
 
         //loads first level
         System.out.println("preparing array from levelController");
-        ArrayList<GameObject> levelOne = lc.readLevel(0).getObjects();
+        Level levelOne = lc.readLevel(0);
         lc.readLevel(0).getObjects().toString();
 
-        for (GameObject o : levelOne) {
+        for (GameObject o : levelOne.getObjects()) {
             world.addBody(o);
         }
+
+        lanky.translate(levelOne.getLankyPoint().getX(), levelOne.getLankyPoint().getY());
+        squat.translate(levelOne.getSquatPoint().getX(), levelOne.getSquatPoint().getY());
+
+        Rectangle goal = new Rectangle(1,2);
+        GameObject goall = new GameObject();
+        goall.addFixture(goal, 0, 0,0);
+        goall.setMassType(MassType.INFINITE);
+        goall.translate(levelOne.getGoalPoint().getX(), levelOne.getGoalPoint().getY());
+        world.addBody(goall);
 
         Lava testLava = new Lava(-10, -2, 7, 5);
         world.addBody(testLava);
