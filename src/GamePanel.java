@@ -75,7 +75,7 @@ public class GamePanel extends JPanel implements KeyListener{
         Mass squatMass = new Mass(new Vector2(0, 0), 10, 1);
         squat.setMass(squatMass);
         squat.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
-        squat.translate(-39,28);
+//        squat.translate(-39,28);
         world.addSquat(squat);
 
         //makes lanky
@@ -85,8 +85,26 @@ public class GamePanel extends JPanel implements KeyListener{
         Mass lankyMass = new Mass(new Vector2(0, 0), 10, 1);
         lanky.setMass(lankyMass);
         lanky.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
-        lanky.translate(-39,28);
+//        lanky.translate(-39,28);
         world.addLanky(lanky);
+
+
+        Rectangle pusher = new Rectangle(5,1);
+        GameObject puusher = new GameObject();
+        puusher.addFixture(pusher,.01);
+        puusher.setMass(MassType.NORMAL);
+        puusher.translate(-19.5,3.9);
+        world.addBody(puusher);
+//
+
+
+
+        Circle pushed = new Circle(1);
+        GameObject puushed = new GameObject();
+        puushed.addFixture(pushed, .1,.1,1.1);
+        puushed.setMass(MassType.NORMAL);
+        puushed.translate(-15,4.5);
+        world.addBody(puushed);
 
         //testing platforms
 //        MovingPlatform testMovePlatform = new MovingPlatform(new Vector2(-5, 5), new Vector2(-5, 5), new Vector2(0, 0), 5, 1, 1);
@@ -96,7 +114,6 @@ public class GamePanel extends JPanel implements KeyListener{
         //loads first level
         System.out.println("preparing array from levelController");
         Level levelOne = lc.readLevel(0);
-        lc.readLevel(0).getObjects().toString();
 
         for (GameObject o : levelOne.getObjects()) {
             world.addBody(o);
@@ -107,13 +124,13 @@ public class GamePanel extends JPanel implements KeyListener{
 
         Rectangle goal = new Rectangle(1,2);
         GameObject goall = new GameObject();
-        goall.addFixture(goal, 0, 0,0);
+        goall.addFixture(goal, 1, 1,1);
         goall.setMassType(MassType.INFINITE);
         goall.translate(levelOne.getGoalPoint().getX(), levelOne.getGoalPoint().getY());
         world.addBody(goall);
 
-        Lava testLava = new Lava(-10, -2, 7, 5);
-        world.addBody(testLava);
+//        Lava testLava = new Lava(-10, -2, 7, 5);
+//        world.addBody(testLava);
 
 
 //        world.raycast()
@@ -132,14 +149,14 @@ public class GamePanel extends JPanel implements KeyListener{
 //
 //        // try a rectangle
 //        for(int i = 0; i<100; i++) {
-            Circle rectShape = new Circle(1.0);
-            GameObject rectangle = new GameObject();
-            rectangle.addFixture(rectShape, 0.5,.2, .3);
-            rectangle.setMass(MassType.NORMAL);
-            rectangle.translate(0, 10.0);
-
-            this.world.addBody(rectangle);
-//        }
+//            Circle rectShape = new Circle(1.0);
+//            GameObject rectangle = new GameObject();
+//            rectangle.addFixture(rectShape, 0.5,.2, .3);
+//            rectangle.setMass(MassType.NORMAL);
+//            rectangle.translate(0, 10.0);
+//
+//            this.world.addBody(rectangle);
+////        }
 //
 //        // try a polygon with lots of vertices
 //        Polygon polyShape = Geometry.createUnitCirclePolygon(10, 1.0);
@@ -234,6 +251,7 @@ public class GamePanel extends JPanel implements KeyListener{
         thread.setDaemon(true);
         // start the game loop
         thread.start();
+        System.out.println("timer start");
     }
 
     private void gameLoop() {
@@ -257,6 +275,7 @@ public class GamePanel extends JPanel implements KeyListener{
         checkDeathCollisions();
 
         repaint();
+        System.out.println("gamelooping");
     }
 
     private void passKeys() {
@@ -266,6 +285,7 @@ public class GamePanel extends JPanel implements KeyListener{
 
         if (isKeyPressed(KeyEvent.VK_A) && squat.getLinearVelocity().x > -10) {
             squat.applyForce(new Force(-10, 0));
+            System.out.println("key pressed");
         }
         if (isKeyPressed(KeyEvent.VK_D) && squat.getLinearVelocity().x < 10) {
             squat.applyForce(new Force(10, 0));
@@ -325,6 +345,8 @@ public class GamePanel extends JPanel implements KeyListener{
             // draw the object
             go.render(g);
         }
+
+        System.out.println("bodies loaded");
     }
 
     public void paintComponent(Graphics g) {
