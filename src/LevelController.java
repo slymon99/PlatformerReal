@@ -74,7 +74,7 @@ public class LevelController {
 
             writer.close();
         } catch (IOException e) {
-            // do something
+            e.printStackTrace();
         }
 
         nextLevel++;
@@ -91,7 +91,9 @@ public class LevelController {
         }
 
         if (line[0].equals("platform")) {
+            System.out.println("I loaded platform" + values[0]+ " " + values[1]+ " " + values[2] + " " + values[3] );
             return (new Platform(values[0], values[1], values[2], values[3]));
+
         } else {
             System.out.println("Error parsing line - unknown type \"" + line[0] + "\"");
             return null;

@@ -22,12 +22,13 @@ import org.dyn4j.geometry.Vector2;
 /**
  * Created by Simon on 12/3/2016.
  */
-public class GamePanel extends JPanel implements KeyListener {
+public class GamePanel extends JPanel implements KeyListener{
 
     private boolean stopped;
     private GameWorld world;
 
     private ArrayList<MovingPlatform> movingPlatforms;
+    private ArrayList<Lava> lavaPlatforms;
 
     private long last;
     private boolean[] keys;
@@ -44,6 +45,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
 
         movingPlatforms = new ArrayList<MovingPlatform>();
+        lavaPlatforms = new ArrayList<Lava>();
         lc = new LevelController();
 
         // make sure we are not stopped
@@ -73,7 +75,7 @@ public class GamePanel extends JPanel implements KeyListener {
         Mass squatMass = new Mass(new Vector2(0, 0), 10, 1);
         squat.setMass(squatMass);
         squat.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
-        squat.translate(-39, 28);
+//        squat.translate(-39,28);
         world.addSquat(squat);
 
         //makes lanky
@@ -83,8 +85,26 @@ public class GamePanel extends JPanel implements KeyListener {
         Mass lankyMass = new Mass(new Vector2(0, 0), 10, 1);
         lanky.setMass(lankyMass);
         lanky.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
-        lanky.translate(-39, 28);
+//        lanky.translate(-39,28);
         world.addLanky(lanky);
+
+
+        Rectangle pusher = new Rectangle(5,1);
+        GameObject puusher = new GameObject();
+        puusher.addFixture(pusher,.01);
+        puusher.setMass(MassType.NORMAL);
+        puusher.translate(-19.5,3.9);
+        world.addBody(puusher);
+//
+
+
+
+        Circle pushed = new Circle(1);
+        GameObject puushed = new GameObject();
+        puushed.addFixture(pushed, .1,.1,1.1);
+        puushed.setMass(MassType.NORMAL);
+        puushed.translate(-15,4.5);
+        world.addBody(puushed);
 
         //testing platforms
 //        MovingPlatform testMovePlatform = new MovingPlatform(new Vector2(-5, 5), new Vector2(-5, 5), new Vector2(0, 0), 5, 1, 1);
@@ -94,25 +114,29 @@ public class GamePanel extends JPanel implements KeyListener {
         //loads first level
         System.out.println("preparing array from levelController");
         ArrayList<GameObject> levelOne = lc.readLevel(0).getObjects();
+        lc.readLevel(0).getObjects().toString();
 
         for (GameObject o : levelOne) {
             world.addBody(o);
         }
 
-        Lava testLava = new Lava(-10, 15, 30, 2);
+        Lava testLava = new Lava(-10, -2, 7, 5);
         world.addBody(testLava);
 
-        // create a circle
-        Circle cirShape = new Circle(0.5);
-        GameObject circle = new GameObject();
-        circle.addFixture(cirShape);
-        circle.setMass(MassType.NORMAL);
-        circle.translate(2.0, 2.0);
-        // test adding some force
-        circle.applyForce(new Vector2(-100.0, 0.0));
-        // set some linear damping to simulate rolling friction
-        circle.setLinearDamping(0.05);
-        this.world.addBody(circle);
+
+//        world.raycast()
+
+//        // create a circle
+//        Circle cirShape = new Circle(0.5);
+//        GameObject circle = new GameObject();
+//        circle.addFixture(cirShape);
+//        circle.setMass(MassType.NORMAL);
+//        circle.translate(2.0, 2.0);
+//        // test adding some force
+//        circle.applyForce(new Vector2(-100.0, 0.0));
+//        // set some linear damping to simulate rolling friction
+//        circle.setLinearDamping(0.05);
+//        this.world.addBody(circle);
 //
 //        // try a rectangle
 //        for(int i = 0; i<100; i++) {
@@ -238,6 +262,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
         world.update(elapsedTime);
         updateAllPlatforms();
+        checkDeathCollisions();
 
         repaint();
     }
