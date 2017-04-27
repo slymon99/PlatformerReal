@@ -16,10 +16,11 @@ public class GameObject extends Body {
      */
     public GameObject() {
         // randomly generate the color
-        this.color = new Color(
-                (float)Math.random() * 0.5f + 0.5f,
-                (float)Math.random() * 0.5f + 0.5f,
-                (float)Math.random() * 0.5f + 0.5f);
+        this.color = new Color(255,0,255);
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public GameObject(Color c) {

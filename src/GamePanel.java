@@ -22,13 +22,12 @@ import org.dyn4j.geometry.Vector2;
 /**
  * Created by Simon on 12/3/2016.
  */
-public class GamePanel extends JPanel implements KeyListener{
+public class GamePanel extends JPanel implements KeyListener {
 
     private boolean stopped;
     private GameWorld world;
 
     private ArrayList<MovingPlatform> movingPlatforms;
-    private ArrayList<Lava> lavaPlatforms;
 
     private long last;
     private boolean[] keys;
@@ -45,7 +44,6 @@ public class GamePanel extends JPanel implements KeyListener{
 
 
         movingPlatforms = new ArrayList<MovingPlatform>();
-        lavaPlatforms = new ArrayList<Lava>();
         lc = new LevelController();
 
         // make sure we are not stopped
@@ -70,22 +68,22 @@ public class GamePanel extends JPanel implements KeyListener{
 
         //makes squat
         Rectangle squatRect = new Rectangle(1.5, 1.5);
-        Player squat = new Player(Color.GREEN);
+        Player squat = new Player(new Color(162, 217, 72));
         squat.addFixture(squatRect, 0.5, .75, 0);
         Mass squatMass = new Mass(new Vector2(0, 0), 10, 1);
         squat.setMass(squatMass);
         squat.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
-        squat.translate(-39,28);
+        squat.translate(-39, 28);
         world.addSquat(squat);
 
         //makes lanky
         Rectangle lankyRect = new Rectangle(1, 3);
-        Player lanky = new Player(Color.BLUE);
+        Player lanky = new Player(new Color(49, 135, 143));
         lanky.addFixture(lankyRect, 0.5, .75, 0);
         Mass lankyMass = new Mass(new Vector2(0, 0), 10, 1);
         lanky.setMass(lankyMass);
         lanky.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
-        lanky.translate(-39,28);
+        lanky.translate(-39, 28);
         world.addLanky(lanky);
 
         //testing platforms
@@ -96,39 +94,35 @@ public class GamePanel extends JPanel implements KeyListener{
         //loads first level
         System.out.println("preparing array from levelController");
         ArrayList<GameObject> levelOne = lc.readLevel(0).getObjects();
-        lc.readLevel(0).getObjects().toString();
 
         for (GameObject o : levelOne) {
             world.addBody(o);
         }
 
-        Lava testLava = new Lava(-10, -2, 7, 5);
+        Lava testLava = new Lava(-10, 15, 30, 2);
         world.addBody(testLava);
 
-
-//        world.raycast()
-
-//        // create a circle
-//        Circle cirShape = new Circle(0.5);
-//        GameObject circle = new GameObject();
-//        circle.addFixture(cirShape);
-//        circle.setMass(MassType.NORMAL);
-//        circle.translate(2.0, 2.0);
-//        // test adding some force
-//        circle.applyForce(new Vector2(-100.0, 0.0));
-//        // set some linear damping to simulate rolling friction
-//        circle.setLinearDamping(0.05);
-//        this.world.addBody(circle);
+        // create a circle
+        Circle cirShape = new Circle(0.5);
+        GameObject circle = new GameObject();
+        circle.addFixture(cirShape);
+        circle.setMass(MassType.NORMAL);
+        circle.translate(2.0, 2.0);
+        // test adding some force
+        circle.applyForce(new Vector2(-100.0, 0.0));
+        // set some linear damping to simulate rolling friction
+        circle.setLinearDamping(0.05);
+        this.world.addBody(circle);
 //
 //        // try a rectangle
 //        for(int i = 0; i<100; i++) {
-            Circle rectShape = new Circle(1.0);
-            GameObject rectangle = new GameObject();
-            rectangle.addFixture(rectShape, 0.5,.2, .3);
-            rectangle.setMass(MassType.NORMAL);
-            rectangle.translate(0, 10.0);
-
-            this.world.addBody(rectangle);
+//            Circle rectShape = new Circle(1.0);
+//            GameObject rectangle = new GameObject();
+//            rectangle.addFixture(rectShape, 0.5,.2, .3);
+//            rectangle.setMass(MassType.NORMAL);
+//            rectangle.translate(0, 10.0);
+//
+//            this.world.addBody(rectangle);
 //        }
 //
 //        // try a polygon with lots of vertices
@@ -244,7 +238,6 @@ public class GamePanel extends JPanel implements KeyListener{
 
         world.update(elapsedTime);
         updateAllPlatforms();
-        checkDeathCollisions();
 
         repaint();
     }
@@ -267,6 +260,10 @@ public class GamePanel extends JPanel implements KeyListener{
         boolean middleClearSquat = world.raycast(world.getSquat().getJumpDetectionRay(), .78, false, false, true, result);
         boolean canJump = (leftSideClearSquat || rightSideClearSquat || middleClearSquat) && squat.canJump();
 
+        if(analyzeRaycastResultForLava(result)){
+            initializeWorld();
+        };
+
         if (isKeyPressed(KeyEvent.VK_W) && canJump) {
             squat.applyImpulse(new Vector2(0, 90));
             squat.jump();
@@ -285,6 +282,10 @@ public class GamePanel extends JPanel implements KeyListener{
         boolean middleClear = world.raycast(world.getLanky().getJumpDetectionRayRight(), 1.6, false, false, true, result2);
         boolean canJump2 = (leftSideClear || rightSideClear || middleClear) && lanky.canJump();
 
+        if(analyzeRaycastResultForLava(result2)){
+            initializeWorld();
+        };
+
         if (isKeyPressed(KeyEvent.VK_UP) && canJump2) {
             lanky.applyImpulse(new Vector2(0, 90));
             lanky.jump();
@@ -296,6 +297,18 @@ public class GamePanel extends JPanel implements KeyListener{
         squat.tickUp();
         lanky.tickUp();
 
+    }
+
+    private boolean analyzeRaycastResultForLava(ArrayList<RaycastResult> results) {
+        boolean touchingLava = false;
+
+        for (RaycastResult r : results) {
+            if (r.getBody() instanceof Lava) {
+                touchingLava = true;
+            }
+        }
+
+        return touchingLava;
     }
 
     private void render(Graphics2D g) {
@@ -320,18 +333,8 @@ public class GamePanel extends JPanel implements KeyListener{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-
-//        AffineTransform yFlip = AffineTransform.getScaleInstance(1, -1);
-//        AffineTransform move = AffineTransform.getTranslateInstance(0, -600);
-//        g2.transform(yFlip);
-//        g2.transform(move);
-
-//        g2.setColor(new Color(210,214,217));
-//        g2.fillRect(0,0,2000,2000);
-
-        //let the worldDepreciated render all sprites
-//        worldDepreciated.render(g2);
-
+        g2.setColor(new Color(164, 164, 164));
+        g2.fillRect(0,0,1440,1080);
         render(g2);
     }
 
@@ -339,16 +342,6 @@ public class GamePanel extends JPanel implements KeyListener{
         for (MovingPlatform p : movingPlatforms) {
             p.update();
         }
-    }
-
-    private void checkDeathCollisions(){
-        for(Lava l: lavaPlatforms){
-//            world.raycast(Player)
-        }
-    }
-
-    private void resetLevel() {
-
     }
 
     @Override
