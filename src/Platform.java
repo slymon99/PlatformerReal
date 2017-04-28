@@ -15,7 +15,7 @@ public class Platform extends GameObject{
         super.addFixture(new Rectangle(width, height));
         super.translate(x, y);
 
-        color = Color.getHSBColor(0,0,((float)y/40.0f));
+        color = new Color(59, 59, 59);
         setColor(color);
 
     }

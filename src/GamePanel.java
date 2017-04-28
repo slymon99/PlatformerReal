@@ -88,23 +88,23 @@ public class GamePanel extends JPanel implements KeyListener{
 //        lanky.translate(-39,28);
         world.addLanky(lanky);
 
-
-        Rectangle pusher = new Rectangle(5,1);
-        GameObject puusher = new GameObject();
-        puusher.addFixture(pusher,.01);
-        puusher.setMass(MassType.NORMAL);
-        puusher.translate(-19.5,3.9);
-        world.addBody(puusher);
 //
-
-
-
-        Circle pushed = new Circle(1);
-        GameObject puushed = new GameObject();
-        puushed.addFixture(pushed, .1,.1,1.1);
-        puushed.setMass(MassType.NORMAL);
-        puushed.translate(-15,4.5);
-        world.addBody(puushed);
+//        Rectangle pusher = new Rectangle(5,1);
+//        GameObject puusher = new GameObject();
+//        puusher.addFixture(pusher,.01);
+//        puusher.setMass(MassType.NORMAL);
+//        puusher.translate(-19.5,3.9);
+//        world.addBody(puusher);
+////
+//
+//
+//
+//        Circle pushed = new Circle(1);
+//        GameObject puushed = new GameObject();
+//        puushed.addFixture(pushed, .1,.1,1.1);
+//        puushed.setMass(MassType.NORMAL);
+//        puushed.translate(-15,4.5);
+//        world.addBody(puushed);
 
         //testing platforms
 //        MovingPlatform testMovePlatform = new MovingPlatform(new Vector2(-5, 5), new Vector2(-5, 5), new Vector2(0, 0), 5, 1, 1);
@@ -113,15 +113,14 @@ public class GamePanel extends JPanel implements KeyListener{
 
         //loads first level
         System.out.println("preparing array from levelController");
-        ArrayList<GameObject> levelOne = lc.readLevel(0).getObjects();
-        lc.readLevel(0).getObjects().toString();
+        Level level = lc.readLevel(0);
+        ArrayList<GameObject> levelOne = level.getObjects();
+
 
         for (GameObject o : levelOne) {
             world.addBody(o);
         }
 
-        Lava testLava = new Lava(-10, -2, 7, 5);
-        world.addBody(testLava);
 
 
 //        world.raycast()
@@ -262,7 +261,6 @@ public class GamePanel extends JPanel implements KeyListener{
 
         world.update(elapsedTime);
         updateAllPlatforms();
-        checkDeathCollisions();
 
         repaint();
     }
