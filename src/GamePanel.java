@@ -101,7 +101,7 @@ public class GamePanel extends JPanel implements KeyListener{
 
         Circle pushed = new Circle(1);
         GameObject puushed = new GameObject();
-        puushed.addFixture(pushed, .1,.1,1.1);
+        puushed.addFixture(pushed, .1,.1,0.5);
         puushed.setMass(MassType.NORMAL);
         puushed.translate(-15,4.5);
         world.addBody(puushed);
@@ -113,15 +113,18 @@ public class GamePanel extends JPanel implements KeyListener{
 
         //loads first level
         System.out.println("preparing array from levelController");
-        ArrayList<GameObject> levelOne = lc.readLevel(0).getObjects();
+        Level levelOne = lc.readLevel(0);
         lc.readLevel(0).getObjects().toString();
 
-        for (GameObject o : levelOne) {
+        for (GameObject o : levelOne.getObjects()) {
             world.addBody(o);
         }
 
-        Lava testLava = new Lava(-10, -2, 7, 5);
-        world.addBody(testLava);
+        lanky.translate(levelOne.getLankyPoint().getX(), levelOne.getLankyPoint().getY());
+        squat.translate(levelOne.getSquatPoint().getX(), levelOne.getSquatPoint().getY());
+
+//        Lava testLava = new Lava(-10, -2, 7, 5);
+//        world.addBody(testLava);
 
 
 //        world.raycast()
@@ -262,7 +265,6 @@ public class GamePanel extends JPanel implements KeyListener{
 
         world.update(elapsedTime);
         updateAllPlatforms();
-        checkDeathCollisions();
 
         repaint();
     }

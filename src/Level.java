@@ -26,6 +26,7 @@ public class Level {
         goal = g;
     }
 
+
     public Point getSquatPoint() {
         return squat;
     }
