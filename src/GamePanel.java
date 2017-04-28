@@ -123,6 +123,13 @@ public class GamePanel extends JPanel implements KeyListener{
         lanky.translate(levelOne.getLankyPoint().getX(), levelOne.getLankyPoint().getY());
         squat.translate(levelOne.getSquatPoint().getX(), levelOne.getSquatPoint().getY());
 
+        Rectangle goal = new Rectangle(1,2);
+        GameObject goall = new GameObject();
+        goall.addFixture(goal, 1, 1,1);
+        goall.setMassType(MassType.INFINITE);
+        goall.translate(levelOne.getGoalPoint().getX(), levelOne.getGoalPoint().getY());
+        world.addBody(goall);
+
 //        Lava testLava = new Lava(-10, -2, 7, 5);
 //        world.addBody(testLava);
 
