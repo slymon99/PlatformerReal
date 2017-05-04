@@ -14,7 +14,6 @@ public class LevelController {
     }
 
     public Level readLevel(int levelNum) {
-        System.out.println("reading level...");
 
         ArrayList<GameObject> levelObjects = new ArrayList<GameObject>();
 
@@ -91,7 +90,6 @@ public class LevelController {
         }
 
         if (line[0].equals("platform")) {
-            System.out.println("I loaded platform" + values[0]+ " " + values[1]+ " " + values[2] + " " + values[3] );
             return (new Platform(values[0], values[1], values[2], values[3]));
 
         }

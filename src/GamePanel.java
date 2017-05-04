@@ -22,10 +22,12 @@ import org.dyn4j.geometry.Vector2;
 /**
  * Created by Simon on 12/3/2016.
  */
-public class GamePanel extends JPanel implements KeyListener{
+public class GamePanel extends JPanel implements KeyListener {
 
     private boolean stopped;
     private GameWorld world;
+
+    private int currentLevel;
 
     private ArrayList<MovingPlatform> movingPlatforms;
     private ArrayList<Lava> lavaPlatforms;
@@ -44,6 +46,8 @@ public class GamePanel extends JPanel implements KeyListener{
         addKeyListener(this);
 
 
+        currentLevel = 0;
+
         movingPlatforms = new ArrayList<MovingPlatform>();
         lavaPlatforms = new ArrayList<Lava>();
         lc = new LevelController();
@@ -52,21 +56,13 @@ public class GamePanel extends JPanel implements KeyListener{
         this.stopped = false;
 
         // setup the world
-        this.initializeWorld();
+        this.initializeWorld(currentLevel);
 
 
     }
 
-    public void initializeWorld() {
+    public void initializeWorld(int levelNum) {
         world = new GameWorld();
-
-//        Rectangle floorRect = new Rectangle(15.0, 7.0);
-//        GameObject floor = new GameObject();
-//        floor.addFixture(new BodyFixture(floorRect));
-//        floor.setMass(MassType.INFINITE);
-//        // move the floor down a bit
-//        floor.translate(0.0, -4.0);
-//        this.world.addBody(floor);
 
         //makes squat
         Rectangle squatRect = new Rectangle(1.5, 1.5);
@@ -75,7 +71,6 @@ public class GamePanel extends JPanel implements KeyListener{
         Mass squatMass = new Mass(new Vector2(0, 0), 10, 1);
         squat.setMass(squatMass);
         squat.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
-//        squat.translate(-39,28);
         world.addSquat(squat);
 
         //makes lanky
@@ -85,50 +80,35 @@ public class GamePanel extends JPanel implements KeyListener{
         Mass lankyMass = new Mass(new Vector2(0, 0), 10, 1);
         lanky.setMass(lankyMass);
         lanky.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
-//        lanky.translate(-39,28);
         world.addLanky(lanky);
 
 
-        Rectangle pusher = new Rectangle(5,1);
-        GameObject puusher = new GameObject();
-        puusher.addFixture(pusher,.01);
-        puusher.setMass(MassType.NORMAL);
-        puusher.translate(-19.5,3.9);
-        world.addBody(puusher);
+//        Rectangle pusher = new Rectangle(5,1);
+//        GameObject puusher = new GameObject();
+//        puusher.addFixture(pusher,.01);
+//        puusher.setMass(MassType.NORMAL);
+//        puusher.translate(-19.5,3.9);
+//        world.addBody(puusher);
+////
+//
 //
 
-
-
-        Circle pushed = new Circle(1);
-        GameObject puushed = new GameObject();
-        puushed.addFixture(pushed, .1,.1,0.5);
-        puushed.setMass(MassType.NORMAL);
-        puushed.translate(-15,4.5);
-        world.addBody(puushed);
-
-        //testing platforms
-//        MovingPlatform testMovePlatform = new MovingPlatform(new Vector2(-5, 5), new Vector2(-5, 5), new Vector2(0, 0), 5, 1, 1);
-//        world.addBody(testMovePlatform);
-//        movingPlatforms.add(testMovePlatform);
-
+//
         //loads first level
         System.out.println("preparing array from levelController");
-        Level levelOne = lc.readLevel(0);
-        lc.readLevel(0).getObjects().toString();
+        Level l = lc.readLevel(levelNum);
 
-        for (GameObject o : levelOne.getObjects()) {
+        for (GameObject o : l.getObjects()) {
             world.addBody(o);
         }
 
-        lanky.translate(levelOne.getLankyPoint().getX(), levelOne.getLankyPoint().getY());
-        squat.translate(levelOne.getSquatPoint().getX(), levelOne.getSquatPoint().getY());
+        levelSettings(levelNum);
 
-        Rectangle goal = new Rectangle(1,2);
-        GameObject goall = new GameObject();
-        goall.addFixture(goal, 1, 1,1);
-        goall.setMassType(MassType.INFINITE);
-        goall.translate(levelOne.getGoalPoint().getX(), levelOne.getGoalPoint().getY());
-        world.addBody(goall);
+        lanky.translate(l.getLankyPoint().getX(), l.getLankyPoint().getY());
+        squat.translate(l.getSquatPoint().getX(), l.getSquatPoint().getY());
+
+        Goal goal = new Goal(l.getGoalPoint().getX(), l.getGoalPoint().getY());
+        world.addBody(goal);
 
 //        Lava testLava = new Lava(-10, -2, 7, 5);
 //        world.addBody(testLava);
@@ -266,6 +246,7 @@ public class GamePanel extends JPanel implements KeyListener{
         this.last = time;
         // convert from nanoseconds to seconds
         double elapsedTime = diff / NANO_TO_BASE;
+        System.out.println("tps: " + 1/elapsedTime);
         // update the worldDepreciated with the elapsed time and current keys pressed
 
         passKeys();
@@ -294,9 +275,9 @@ public class GamePanel extends JPanel implements KeyListener{
         boolean middleClearSquat = world.raycast(world.getSquat().getJumpDetectionRay(), .78, false, false, true, result);
         boolean canJump = (leftSideClearSquat || rightSideClearSquat || middleClearSquat) && squat.canJump();
 
-        if(analyzeRaycastResultForLava(result)){
-            initializeWorld();
-        };
+        if (analyzeRaycastResultForLava(result)) {
+            initializeWorld(currentLevel);
+        }
 
         if (isKeyPressed(KeyEvent.VK_W) && canJump) {
             squat.applyImpulse(new Vector2(0, 90));
@@ -316,9 +297,14 @@ public class GamePanel extends JPanel implements KeyListener{
         boolean middleClear = world.raycast(world.getLanky().getJumpDetectionRayRight(), 1.6, false, false, true, result2);
         boolean canJump2 = (leftSideClear || rightSideClear || middleClear) && lanky.canJump();
 
-        if(analyzeRaycastResultForLava(result2)){
-            initializeWorld();
-        };
+        if (analyzeRaycastResultForLava(result2)) {
+            initializeWorld(currentLevel);
+        }
+
+        if (analyzeRaycastResultForGoal(result) && analyzeRaycastResultForGoal(result2)) {
+            currentLevel++;
+            initializeWorld(currentLevel);
+        }
 
         if (isKeyPressed(KeyEvent.VK_UP) && canJump2) {
             lanky.applyImpulse(new Vector2(0, 90));
@@ -345,6 +331,18 @@ public class GamePanel extends JPanel implements KeyListener{
         return touchingLava;
     }
 
+    private boolean analyzeRaycastResultForGoal(ArrayList<RaycastResult> results) {
+        boolean touchingGoal = false;
+
+        for (RaycastResult r : results) {
+            if (r.getBody() instanceof Goal) {
+                touchingGoal = true;
+            }
+        }
+
+        return touchingGoal;
+    }
+
     private void render(Graphics2D g) {
 
 
@@ -368,13 +366,35 @@ public class GamePanel extends JPanel implements KeyListener{
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(new Color(164, 164, 164));
-        g2.fillRect(0,0,1440,1080);
+        g2.fillRect(0, 0, 1440, 1080);
         render(g2);
     }
 
     private void updateAllPlatforms() {
         for (MovingPlatform p : movingPlatforms) {
             p.update();
+        }
+    }
+
+    private void levelSettings(int level) {
+        if (level == 0) {
+
+        } else if (level == 1) {
+
+            world.getSquat().setMassType(MassType.NORMAL);
+            world.getLanky().setMassType(MassType.NORMAL);
+
+            for (int i = 0; i < 10; i++) {
+                Circle pushed = new Circle(2);
+                GameObject puushed = new GameObject();
+                puushed.addFixture(pushed, .1, .1, 1);
+                Mass bigBoi = new Mass(new Vector2(0, 0), 100, 100);
+                puushed.setMass(bigBoi);
+                puushed.translate(-20 + 5 * i, 0);
+                puushed.applyImpulse(new Vector2(5, 0));
+                world.addBody(puushed);
+            }
+
         }
     }
 
