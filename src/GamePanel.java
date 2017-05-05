@@ -99,12 +99,14 @@ public class GamePanel extends JPanel implements KeyListener{
 
 
 
-        Circle pushed = new Circle(1);
+        Circle pushed = new Circle(2);
         GameObject puushed = new GameObject();
         puushed.addFixture(pushed, .1,.1,0.5);
         puushed.setMass(MassType.NORMAL);
         puushed.translate(-15,4.5);
         world.addBody(puushed);
+
+
 
         //testing platforms
 //        MovingPlatform testMovePlatform = new MovingPlatform(new Vector2(-5, 5), new Vector2(-5, 5), new Vector2(0, 0), 5, 1, 1);
@@ -130,8 +132,8 @@ public class GamePanel extends JPanel implements KeyListener{
         goall.translate(levelOne.getGoalPoint().getX(), levelOne.getGoalPoint().getY());
         world.addBody(goall);
 
-//        Lava testLava = new Lava(-10, -2, 7, 5);
-//        world.addBody(testLava);
+        Lava testLava = new Lava(-2000, -30, 4000, 1);
+        world.addBody(testLava);
 
 
 //        world.raycast()
@@ -273,6 +275,7 @@ public class GamePanel extends JPanel implements KeyListener{
         world.update(elapsedTime);
         updateAllPlatforms();
 
+
         repaint();
     }
 
@@ -330,6 +333,10 @@ public class GamePanel extends JPanel implements KeyListener{
 
         squat.tickUp();
         lanky.tickUp();
+
+        if(isKeyPressed(KeyEvent.VK_R)){
+            initializeWorld();
+        }
 
     }
 
