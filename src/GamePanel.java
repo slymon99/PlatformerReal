@@ -319,7 +319,7 @@ public class GamePanel extends JPanel implements KeyListener{
         lanky.tickUp();
 
         if(isKeyPressed(KeyEvent.VK_R)){
-            initializeWorld();
+            initializeWorld(currentLevel);
         }
 
     }
@@ -383,6 +383,19 @@ public class GamePanel extends JPanel implements KeyListener{
 
     private void levelSettings(int level) {
         if (level == 0) {
+            Rectangle pusher = new Rectangle(5,1);
+            GameObject puusher = new GameObject();
+            puusher.addFixture(pusher,.01);
+            puusher.setMass(MassType.NORMAL);
+            puusher.translate(-19.5,3.9);
+            world.addBody(puusher);
+
+            Circle pushed = new Circle(2);
+            GameObject puushed = new GameObject();
+            puushed.addFixture(pushed, .1,.1,0.5);
+            puushed.setMass(MassType.NORMAL);
+            puushed.translate(-15,4.5);
+            world.addBody(puushed);
 
         } else if (level == 1) {
 
