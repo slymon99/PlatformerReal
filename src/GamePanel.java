@@ -7,7 +7,10 @@ import org.dyn4j.dynamics.contact.ContactConstraint;
 import org.dyn4j.geometry.*;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
@@ -58,6 +61,11 @@ public class GamePanel extends JPanel implements KeyListener{
         // setup the world
         this.initializeWorld(currentLevel);
 
+        Timer graphicsUpdate = new Timer(1000/10, (ActionEvent e) -> {
+            repaint();
+        });
+
+        graphicsUpdate.start();
 
     }
 
@@ -216,11 +224,6 @@ public class GamePanel extends JPanel implements KeyListener{
                         e.printStackTrace();
                     }
 
-//                    try {
-//                        Thread.sleep(1000/60);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
 
                     // you could add a Thread.yield(); or
                     // Thread.sleep(long) here to give the
@@ -247,6 +250,7 @@ public class GamePanel extends JPanel implements KeyListener{
         this.last = time;
         // convert from nanoseconds to seconds
         double elapsedTime = diff / NANO_TO_BASE;
+        System.out.println("tps: " + 1/elapsedTime);
         // update the worldDepreciated with the elapsed time and current keys pressed
 
         passKeys();
