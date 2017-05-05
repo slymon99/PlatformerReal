@@ -7,7 +7,10 @@ import org.dyn4j.dynamics.contact.ContactConstraint;
 import org.dyn4j.geometry.*;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
@@ -58,6 +61,11 @@ public class GamePanel extends JPanel implements KeyListener {
         // setup the world
         this.initializeWorld(currentLevel);
 
+        Timer graphicsUpdate = new Timer(1000/10, (ActionEvent e) -> {
+            repaint();
+        });
+
+        graphicsUpdate.start();
 
     }
 
@@ -216,12 +224,7 @@ public class GamePanel extends JPanel implements KeyListener {
                         e.printStackTrace();
                     }
 
-//                    try {
-//                        Thread.sleep(1000/60);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-                    
+
                     // you could add a Thread.yield(); or
                     // Thread.sleep(long) here to give the
                     // CPU some breathing room
@@ -255,7 +258,6 @@ public class GamePanel extends JPanel implements KeyListener {
         world.update(elapsedTime);
         updateAllPlatforms();
 
-        repaint();
     }
 
     private void passKeys() {
@@ -265,11 +267,9 @@ public class GamePanel extends JPanel implements KeyListener {
 
         if (isKeyPressed(KeyEvent.VK_A) && squat.getLinearVelocity().x > -10) {
             squat.applyForce(new Force(-10, 0));
-//            squat.applyImpulse(new Vector2(-5, 0));
         }
         if (isKeyPressed(KeyEvent.VK_D) && squat.getLinearVelocity().x < 10) {
             squat.applyForce(new Force(10, 0));
-//            squat.applyImpulse(new Vector2(5, 0));
         }
 
         ArrayList<RaycastResult> result = new ArrayList<RaycastResult>();
@@ -289,7 +289,6 @@ public class GamePanel extends JPanel implements KeyListener {
 
         if (isKeyPressed(KeyEvent.VK_LEFT) && lanky.getLinearVelocity().x > -10) {
             lanky.applyForce(new Force(-9, 0));
-//            lanky.applyImpulse(new Vector2(-9, 0));
         }
         if (isKeyPressed(KeyEvent.VK_RIGHT) && lanky.getLinearVelocity().x < 10) {
             lanky.applyForce(new Force(9, 0));
