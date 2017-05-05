@@ -323,7 +323,7 @@ public class GamePanel extends JPanel implements KeyListener{
         lanky.tickUp();
 
         if(isKeyPressed(KeyEvent.VK_R)){
-            initializeWorld();
+            initializeWorld(currentLevel);
         }
 
     }
