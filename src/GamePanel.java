@@ -203,13 +203,7 @@ public class GamePanel extends JPanel implements KeyListener {
     public void start() {
         // initialize the last update time
         this.last = System.nanoTime();
-        // don't allow AWT to paint the canvas since we are
-//        this.canvas.setIgnoreRepaint(true);
-        // enable double buffering (the JFrame has to be
-        // visible before this can be done)
-//        this.canvas.createBufferStrategy(2);
-        // run a separate thread to do active rendering
-        // because we don't want to do it on the EDT
+
         Thread thread = new Thread() {
             public void run() {
                 // perform an infinite loop stopped
@@ -221,6 +215,13 @@ public class GamePanel extends JPanel implements KeyListener {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
+//                    try {
+//                        Thread.sleep(1000/60);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+                    
                     // you could add a Thread.yield(); or
                     // Thread.sleep(long) here to give the
                     // CPU some breathing room
@@ -264,12 +265,14 @@ public class GamePanel extends JPanel implements KeyListener {
 
         if (isKeyPressed(KeyEvent.VK_A) && squat.getLinearVelocity().x > -10) {
             squat.applyForce(new Force(-10, 0));
+//            squat.applyImpulse(new Vector2(-5, 0));
         }
         if (isKeyPressed(KeyEvent.VK_D) && squat.getLinearVelocity().x < 10) {
             squat.applyForce(new Force(10, 0));
+//            squat.applyImpulse(new Vector2(5, 0));
         }
 
-        ArrayList<RaycastResult> result = new ArrayList<RaycastResult>(); //no idea what this does
+        ArrayList<RaycastResult> result = new ArrayList<RaycastResult>();
         boolean leftSideClearSquat = world.raycast(world.getSquat().getJumpDetectionRayLeft(), .78, false, false, true, result);
         boolean rightSideClearSquat = world.raycast(world.getSquat().getJumpDetectionRayRight(), .78, false, false, true, result);
         boolean middleClearSquat = world.raycast(world.getSquat().getJumpDetectionRay(), .78, false, false, true, result);
@@ -286,12 +289,14 @@ public class GamePanel extends JPanel implements KeyListener {
 
         if (isKeyPressed(KeyEvent.VK_LEFT) && lanky.getLinearVelocity().x > -10) {
             lanky.applyForce(new Force(-9, 0));
+//            lanky.applyImpulse(new Vector2(-9, 0));
         }
         if (isKeyPressed(KeyEvent.VK_RIGHT) && lanky.getLinearVelocity().x < 10) {
             lanky.applyForce(new Force(9, 0));
+//            lanky.applyImpulse(new Vector2(9, 0));
         }
 
-        ArrayList<RaycastResult> result2 = new ArrayList<RaycastResult>(); //no idea what this does
+        ArrayList<RaycastResult> result2 = new ArrayList<RaycastResult>();
         boolean leftSideClear = world.raycast(world.getLanky().getJumpDetectionRayLeft(), 1.6, false, false, true, result2);
         boolean rightSideClear = world.raycast(world.getLanky().getJumpDetectionRayRight(), 1.6, false, false, true, result2);
         boolean middleClear = world.raycast(world.getLanky().getJumpDetectionRayRight(), 1.6, false, false, true, result2);
@@ -310,9 +315,6 @@ public class GamePanel extends JPanel implements KeyListener {
             lanky.applyImpulse(new Vector2(0, 90));
             lanky.jump();
         }
-
-//        System.out.println(lanky.getJumpDetectionRay().toString() + " " + lanky.getJumpDetectionRayLeft().toString());
-//        System.out.println;
 
         squat.tickUp();
         lanky.tickUp();
