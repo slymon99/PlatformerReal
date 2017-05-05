@@ -25,7 +25,7 @@ import org.dyn4j.geometry.Vector2;
 /**
  * Created by Simon on 12/3/2016.
  */
-public class GamePanel extends JPanel implements KeyListener {
+public class GamePanel extends JPanel implements KeyListener{
 
     private boolean stopped;
     private GameWorld world;
@@ -258,6 +258,7 @@ public class GamePanel extends JPanel implements KeyListener {
         world.update(elapsedTime);
         updateAllPlatforms();
 
+        repaint();
     }
 
     private void passKeys() {
@@ -267,9 +268,11 @@ public class GamePanel extends JPanel implements KeyListener {
 
         if (isKeyPressed(KeyEvent.VK_A) && squat.getLinearVelocity().x > -10) {
             squat.applyForce(new Force(-10, 0));
+//            squat.applyImpulse(new Vector2(-5, 0));
         }
         if (isKeyPressed(KeyEvent.VK_D) && squat.getLinearVelocity().x < 10) {
             squat.applyForce(new Force(10, 0));
+//            squat.applyImpulse(new Vector2(5, 0));
         }
 
         ArrayList<RaycastResult> result = new ArrayList<RaycastResult>();
@@ -289,6 +292,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
         if (isKeyPressed(KeyEvent.VK_LEFT) && lanky.getLinearVelocity().x > -10) {
             lanky.applyForce(new Force(-9, 0));
+//            lanky.applyImpulse(new Vector2(-9, 0));
         }
         if (isKeyPressed(KeyEvent.VK_RIGHT) && lanky.getLinearVelocity().x < 10) {
             lanky.applyForce(new Force(9, 0));
@@ -317,6 +321,10 @@ public class GamePanel extends JPanel implements KeyListener {
 
         squat.tickUp();
         lanky.tickUp();
+
+        if(isKeyPressed(KeyEvent.VK_R)){
+            initializeWorld();
+        }
 
     }
 
