@@ -141,26 +141,26 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
         g2.setColor(color);
         g2.draw(outline);
 
-        g2.setColor(Color.orange);
+        g2.setColor(new Color(49, 135, 143));
         g2.fillRect((int)lankySpawn.getX(),(int)lankySpawn.getY(),10,10);
 
-        g2.setColor(Color.green);
+        g2.setColor(new Color(162, 217, 72));
         g2.fillRect((int)squatSpawn.getX(),(int)squatSpawn.getY(),10,10);
 
-        g2.setColor(Color.pink);
-        g2.fillRect((int)goal.getX(),(int)goal.getY(),10,10);
+        g2.setColor(new Color(192, 73, 164));
+        g2.fillRect((int)goal.getX(),(int)goal.getY(),60,15);
 
         if(drawMode == 0) {
             g2.setColor(color);
         }
         else if(drawMode==1){
-            g2.setColor(Color.orange);
+            g2.setColor(new Color(49, 135, 143));
         }
         else if(drawMode==2){
-            g2.setColor(Color.green);
+            g2.setColor(new Color(162, 217, 72));
         }
         else{
-            g2.setColor(Color.pink);
+            g2.setColor(new Color(192, 73, 164));
         }
 
         g2.fillRect(700,380,20,20);
