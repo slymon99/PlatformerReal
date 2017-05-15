@@ -49,7 +49,7 @@ public class GamePanel extends JPanel implements KeyListener {
         addKeyListener(this);
 
 
-        currentLevel = 0;
+        currentLevel = 2;
 
         movingPlatforms = new ArrayList<MovingPlatform>();
         lavaPlatforms = new ArrayList<Lava>();
@@ -61,7 +61,7 @@ public class GamePanel extends JPanel implements KeyListener {
         // setup the world
         this.initializeWorld(currentLevel);
 
-        Timer graphicsUpdate = new Timer(1000 / 10, (ActionEvent e) -> {
+        Timer graphicsUpdate = new Timer(1000 / 60, (ActionEvent e) -> {
             repaint();
         });
 
@@ -305,7 +305,7 @@ public class GamePanel extends JPanel implements KeyListener {
                 Circle circle = new Circle(2);
                 GameObject circleObject = new GameObject();
                 circleObject.addFixture(circle, .1, .1, 1);
-                circleObject.setMass(new Mass(new Vector2(0,0), 20, 10));
+                circleObject.setMass(new Mass(new Vector2(0,0), 50, 10));
                 circleObject.translate(-30+6*i, 10);
                 circleObject.setColor(new Color(62, 62, 62));
                 circleObject.applyForce(new Force(100,0));
@@ -328,6 +328,17 @@ public class GamePanel extends JPanel implements KeyListener {
                 world.addBody(puushed);
             }
 
+        } else if (level==2){
+            for (int i = 0; i < 10; i++) {
+                Rectangle r = new Rectangle(3,3);
+                GameObject rObject = new GameObject();
+                rObject.addFixture(r, .1, .1, 1);
+                rObject.setMass(new Mass(new Vector2(0,0), 50, 100));
+                rObject.translate(-30+6*i, 10);
+                rObject.setColor(new Color(62, 62, 62));
+                rObject.applyForce(new Force(100,0));
+                world.addBody(rObject);
+            }
         }
     }
 
