@@ -24,7 +24,6 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
     private int drawMode;
 
 
-
     public LevelEditor() {
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -34,18 +33,18 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
         myRects = new ArrayList<ColoredRectangle>();
         color = Color.black;
         drawMode = 0;
-        lankySpawn = new Point(1400,30);
-        squatSpawn = new Point(1400,40);
-        goal = new Point(1400,50);
+        lankySpawn = new Point(1400, 30);
+        squatSpawn = new Point(1400, 40);
+        goal = new Point(1400, 50);
 
-        for(int i = 10; i<1441; i=i+10){
+        for (int i = 10; i < 1441; i = i + 10) {
         }
 
         t = new Timer(1000 / 60, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (isKeyPressed(KeyEvent.VK_SPACE)) {
-                    for (int i = 0; i<myRects.size();i++) {
+                    for (int i = 0; i < myRects.size(); i++) {
                         if (rectContains(myRects.get(i), (int) MouseInfo.getPointerInfo().getLocation().getX() - 720, -(int) MouseInfo.getPointerInfo().getLocation().getY() + 470)) {
                             myRects.remove(i);
                             i--;
@@ -53,47 +52,45 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
                         }
                     }
                 }
-                if(isKeyPressed(KeyEvent.VK_BACK_SPACE)){
-                    if(myRects.size()>0 && cooldown==0) {
+                if (isKeyPressed(KeyEvent.VK_BACK_SPACE)) {
+                    if (myRects.size() > 0 && cooldown == 0) {
                         myRects.remove(myRects.size() - 1);
-                        cooldown=50;
+                        cooldown = 50;
                         repaint();
                     }
                 }
-                if(cooldown>0){
+                if (cooldown > 0) {
                     cooldown--;
                 }
-                if(isKeyPressed(KeyEvent.VK_1)){
+                if (isKeyPressed(KeyEvent.VK_1)) {
                     color = Color.black;
                     repaint();
                 }
-                if(isKeyPressed(KeyEvent.VK_2)){
+                if (isKeyPressed(KeyEvent.VK_2)) {
                     color = Color.red;
                     repaint();
                 }
-                if(isKeyPressed(KeyEvent.VK_3)){
+                if (isKeyPressed(KeyEvent.VK_3)) {
                     color = Color.blue;
                     repaint();
                 }
-                if(isKeyPressed(KeyEvent.VK_S) && cooldown==0){
+                if (isKeyPressed(KeyEvent.VK_S) && cooldown == 0) {
                     LevelController lc = new LevelController();
                     lc.writeLevel(myRects, lankySpawn, squatSpawn, goal);
-                    cooldown=50;
+                    cooldown = 50;
                 }
-                if(isKeyPressed(KeyEvent.VK_UP) && cooldown==0){
-                    if (drawMode<3){
+                if (isKeyPressed(KeyEvent.VK_UP) && cooldown == 0) {
+                    if (drawMode < 3) {
                         drawMode++;
-                    }
-                    else{
+                    } else {
                         drawMode = 0;
                     }
-                    cooldown=25;
+                    cooldown = 25;
                     repaint();
                 }
 
             }
         });
-
 
 
         t.start();
@@ -120,12 +117,12 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
         Graphics2D g2 = (Graphics2D) g;
 
         g2.setColor(new Color(0xE2CAC9));
-        for(int i = 0; i<144; i++){
-            g2.drawLine(i*10,0,i*10,850);
+        for (int i = 0; i < 144; i++) {
+            g2.drawLine(i * 10, 0, i * 10, 850);
         }
 
-        for(int j = 0; j<85; j++){
-            g2.drawLine(0,j*10+5,1440,j*10+5);
+        for (int j = 0; j < 85; j++) {
+            g2.drawLine(0, j * 10 + 5, 1440, j * 10 + 5);
         }
 
         AffineTransform yFlip = AffineTransform.getScaleInstance(1, -1);
@@ -134,7 +131,7 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
         g2.transform(move);
 
 
-        for (int i = 0; i < myRects.size();i++) {
+        for (int i = 0; i < myRects.size(); i++) {
             g2.setColor(myRects.get(i).getColor());
             g2.fill(myRects.get(i));
         }
@@ -142,28 +139,25 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
         g2.draw(outline);
 
         g2.setColor(new Color(49, 135, 143));
-        g2.fillRect((int)lankySpawn.getX(),(int)lankySpawn.getY(),10,10);
+        g2.fillRect((int) lankySpawn.getX(), (int) lankySpawn.getY(), 10, 10);
 
         g2.setColor(new Color(162, 217, 72));
-        g2.fillRect((int)squatSpawn.getX(),(int)squatSpawn.getY(),10,10);
+        g2.fillRect((int) squatSpawn.getX(), (int) squatSpawn.getY(), 10, 10);
 
         g2.setColor(new Color(192, 73, 164));
-        g2.fillRect((int)goal.getX(),(int)goal.getY(),60,15);
+        g2.fillRect((int) goal.getX(), (int) goal.getY(), 60, 15);
 
-        if(drawMode == 0) {
+        if (drawMode == 0) {
             g2.setColor(color);
-        }
-        else if(drawMode==1){
+        } else if (drawMode == 1) {
             g2.setColor(new Color(49, 135, 143));
-        }
-        else if(drawMode==2){
+        } else if (drawMode == 2) {
             g2.setColor(new Color(162, 217, 72));
-        }
-        else{
+        } else {
             g2.setColor(new Color(192, 73, 164));
         }
 
-        g2.fillRect(700,380,20,20);
+        g2.fillRect(700, 380, 20, 20);
     }
 
     @Override
@@ -174,21 +168,18 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if(drawMode == 0) {
+        if (drawMode == 0) {
             rectX = round(e.getX() - 720);
             rectY = round(-e.getY() + 425);
-        }
-        else if(drawMode==1){
-            lankySpawn.setLocation(e.getX() - 720,-e.getY() + 425);
+        } else if (drawMode == 1) {
+            lankySpawn.setLocation(e.getX() - 720, -e.getY() + 425);
             repaint();
 
-        }
-        else if(drawMode==2){
-            squatSpawn.setLocation(e.getX() - 720,-e.getY() + 425);
+        } else if (drawMode == 2) {
+            squatSpawn.setLocation(e.getX() - 720, -e.getY() + 425);
             repaint();
-        }
-        else{
-            goal.setLocation(e.getX() - 720,-e.getY() + 425);
+        } else {
+            goal.setLocation(e.getX() - 720, -e.getY() + 425);
             repaint();
         }
 
@@ -196,10 +187,10 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if(drawMode == 0) {
+        if (drawMode == 0) {
             width = round(e.getX() - rectX - 720);
             height = round(-e.getY() + 425 - rectY);
-            if(height>0 && width >0) {
+            if (height > 0 && width > 0) {
                 myRects.add(new ColoredRectangle(rectX, rectY, width, height, color));
             }
             outline.setSize(-1, -1);
@@ -239,7 +230,7 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if(drawMode == 0) {
+        if (drawMode == 0) {
             width = round(e.getX() - rectX - 720);
             height = round(-e.getY() + 425 - rectY);
             outline.setBounds(rectX, rectY, width, height);
@@ -253,12 +244,11 @@ public class LevelEditor extends JPanel implements MouseListener, KeyListener, M
     }
 
     private static int round(int n) {
-        if(n>= 0) {
+        if (n >= 0) {
             return n / 10 * 10;
-        }else if (n<0){
-            return (n-10)/10 *10;
-        }
-        else return n;
+        } else if (n < 0) {
+            return (n - 10) / 10 * 10;
+        } else return n;
     }
 
     private boolean rectContains(Rectangle rect, int x, int y) {
