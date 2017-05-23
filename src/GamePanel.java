@@ -1,3 +1,4 @@
+import org.dyn4j.collision.Fixture;
 import org.dyn4j.collision.manifold.Manifold;
 import org.dyn4j.collision.narrowphase.Penetration;
 import org.dyn4j.collision.narrowphase.Raycast;
@@ -89,6 +90,28 @@ public class GamePanel extends JPanel implements KeyListener {
         lanky.setMass(lankyMass);
         lanky.setMassType(MassType.FIXED_ANGULAR_VELOCITY);
         world.addLanky(lanky);
+
+//        Mass heavy = new Mass(new Vector2(0,0),4,.5);
+//        Rectangle s1 = new Rectangle(1,2.5);
+//        s1.translate(0,0);
+//        Rectangle s2 = new Rectangle(1,2.5);
+//        s2.translate(4,0);
+//        Rectangle b = new Rectangle(3,1);
+//        b.translate(2.5, -1);
+//        Rectangle wayBottom = new Rectangle(4,1);
+//        wayBottom.translate(2,-22);
+//        GameObject bucket = new GameObject();
+//        bucket.addFixture(s1);
+//        bucket.addFixture(s2);
+//        bucket.addFixture(b);
+//        bucket.addFixture(wayBottom);
+//        bucket.translate(-40,20);
+//        bucket.setMass(MassType.NORMAL);
+//        Mass light = new Mass(new Vector2(0,-22),7,.5);
+//        bucket.setMass(light);
+//        world.addBody(bucket);
+
+
 
         //loads first level
         System.out.println("preparing array from levelController");
@@ -302,14 +325,14 @@ public class GamePanel extends JPanel implements KeyListener {
 //            world.addBody(puushed);
 
             for (int i = 0; i < 10; i++) {
-                Circle circle = new Circle(2);
-                GameObject circleObject = new GameObject();
-                circleObject.addFixture(circle, .1, .1, 1);
-                circleObject.setMass(new Mass(new Vector2(0,0), 20, 10));
-                circleObject.translate(-30+6*i, 10);
-                circleObject.setColor(new Color(62, 62, 62));
-                circleObject.applyForce(new Force(100,0));
-                world.addBody(circleObject);
+//                Circle circle = new Circle(2);
+//                GameObject circleObject = new GameObject();
+//                circleObject.addFixture(circle, .1, .1, 1);
+//                circleObject.setMass(new Mass(new Vector2(0,0), 20, 10));
+//                circleObject.translate(-30+6*i, 10);
+//                circleObject.setColor(new Color(62, 62, 62));
+//                circleObject.applyForce(new Force(100,0));
+//                world.addBody(circleObject);
             }
 
         } else if (level == 1) {
